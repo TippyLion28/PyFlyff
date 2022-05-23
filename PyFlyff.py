@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         self.browser.setUrl(QUrl("https://universe.flyff.com/play"))
         self.setCentralWidget(self.browser)
         self.setWindowIcon(QIcon("icons/flyffu.ico"))
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.showMaximized()
 
 
