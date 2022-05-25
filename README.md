@@ -1,7 +1,7 @@
 # PyFlyff
 QtWebEngine to play Flyff Universe
 
-#Client Hotkeys
+# Client Hotkeys
 
 Ctrl+Shift+F5 = reload client back to https://universe.flyff.com/play
 
