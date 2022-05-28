@@ -9,6 +9,8 @@ Ctrl+Shift+F11 = enter/exit main window fullscreen
 
 Ctrl+Shift+PgUp (PageUp) open a new client window
 
+"End" keyboard key stops the Auto Hotkey loop
+
 # Features
 
 You can configure a small Auto Hotkey script within the Client
