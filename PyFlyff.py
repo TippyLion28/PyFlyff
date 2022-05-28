@@ -87,7 +87,17 @@ class MainWindow(QMainWindow):
     def auto_hotkey_config(self):
 
         hotkey_window_config = Tk()
-        hotkey_window_config.geometry("220x150")
+
+        window_width = 250
+        window_height = 140
+
+        screen_width = hotkey_window_config.winfo_screenwidth()
+        screen_height = hotkey_window_config.winfo_screenheight()
+
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+
+        hotkey_window_config.geometry("250x140+" + str(int(x)) + "+" + str(int(y)))
         hotkey_window_config.resizable(False, False)
         hotkey_window_config.title("Config")
         hotkey_window_config.iconbitmap("icons/flyffu.ico")
@@ -97,12 +107,14 @@ class MainWindow(QMainWindow):
             global repeat_times
 
             try:
-                if activate_key_entry.get() == key_pressed_entry.get():
+                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get()) == "":
+                    messagebox.showerror("Error", "Fields cannot be empty.")
+                elif activation_key_entry.get() == in_game_hotkey_entry.get():
                     messagebox.showerror("Error", "Activate Key and Pressed Key must be different.")
                 else:
-                    activate_key = activate_key_entry.get()
-                    key_to_press = key_pressed_entry.get()
-                    repeat_times = int(times_pressed_entry.get())
+                    activate_key = activation_key_entry.get()
+                    key_to_press = in_game_hotkey_entry.get()
+                    repeat_times = int(repeat_times_entry.get())
 
                     self.set_short_cut(activate_key)
 
@@ -114,25 +126,25 @@ class MainWindow(QMainWindow):
 
         frame.pack(fill=X, padx=5, pady=5)
 
-        activate_key_label = Label(frame, text="Activate Key:", width=10, anchor=W)
-        activate_key_entry = Entry(frame, width=20)
+        activation_key_label = Label(frame, text="Activation Key:", width=15, anchor=W)
+        activation_key_entry = Entry(frame, width=20)
 
-        key_pressed_label = Label(frame, text="Pressed Key:", width=10, anchor=W)
-        key_pressed_entry = Entry(frame, width=20)
+        in_game_hotkey_label = Label(frame, text="In-game Hotkey:", width=15, anchor=W)
+        in_game_hotkey_entry = Entry(frame, width=20)
 
-        times_pressed_label = Label(frame, text="Repeat:", width=10, anchor=W)
-        times_pressed_entry = Entry(frame, width=20)
+        repeat_times_label = Label(frame, text="Repeat:", width=15, anchor=W)
+        repeat_times_entry = Entry(frame, width=20)
 
-        activate_key_label.grid(row=0, column=0, pady=5)
-        activate_key_entry.grid(row=0, column=1, pady=5)
+        activation_key_label.grid(row=0, column=0, pady=5)
+        activation_key_entry.grid(row=0, column=1, pady=5)
 
-        key_pressed_label.grid(row=1, column=0, pady=5)
-        key_pressed_entry.grid(row=1, column=1, pady=5)
+        in_game_hotkey_label.grid(row=1, column=0, pady=5)
+        in_game_hotkey_entry.grid(row=1, column=1, pady=5)
 
-        times_pressed_label.grid(row=2, column=0, pady=5)
-        times_pressed_entry.grid(row=2, column=1, pady=5)
+        repeat_times_label.grid(row=2, column=0, pady=5)
+        repeat_times_entry.grid(row=2, column=1, pady=5)
 
-        button_save = Button(text="Save", width=10, height=2, command=save)
+        button_save = Button(text="Save", width=10, height=1, command=save)
         button_save.pack()
 
         hotkey_window_config.mainloop()
