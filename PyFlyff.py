@@ -1,3 +1,5 @@
+import json
+import pathlib
 import sys
 
 from PyQt5.QtCore import QUrl
@@ -15,8 +17,14 @@ import threading
 url = "https://universe.flyff.com/play"
 icon = "icons/flyffu.ico"
 
-key_to_press = ""
+activation_key = ""
+in_game_key = ""
 repeat_times = 0
+interval = 0
+
+json_file = "AutoHotKey.json"
+json_location = pathlib.Path("AutoHotKey.json")
+
 break_loop = False
 
 
@@ -70,9 +78,9 @@ class MainWindow(QMainWindow):
             while True:
 
                 if counter < repeat_times and break_loop is False:
-                    pyautogui.press(key_to_press)
+                    pyautogui.press(in_game_key)
 
-                    pyautogui.sleep(2)
+                    pyautogui.sleep(interval)
 
                     counter += 1
                 else:
@@ -89,6 +97,11 @@ class MainWindow(QMainWindow):
 
     def auto_hotkey_config(self):
 
+        global activation_key
+        global in_game_key
+        global repeat_times
+        global interval
+
         hotkey_window_config = Tk()
 
         window_width = 250
@@ -100,26 +113,31 @@ class MainWindow(QMainWindow):
         x = (screen_width / 2) - (window_width / 2)
         y = (screen_height / 2) - (window_height / 2)
 
-        hotkey_window_config.geometry("250x140+" + str(int(x)) + "+" + str(int(y)))
+        hotkey_window_config.geometry("250x170+" + str(int(x)) + "+" + str(int(y)))
         hotkey_window_config.resizable(False, False)
         hotkey_window_config.title("Config")
         hotkey_window_config.iconbitmap("icons/flyffu.ico")
 
         def save():
-            global key_to_press
+            global activation_key
+            global in_game_key
             global repeat_times
+            global interval
 
             try:
-                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get()) == "":
+                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                     messagebox.showerror("Error", "Fields cannot be empty.")
                 elif activation_key_entry.get() == in_game_hotkey_entry.get():
                     messagebox.showerror("Error", "Activate Key and Pressed Key must be different.")
                 else:
-                    activate_key = activation_key_entry.get()
-                    key_to_press = in_game_hotkey_entry.get()
+                    activation_key = activation_key_entry.get()
+                    in_game_key = in_game_hotkey_entry.get()
                     repeat_times = int(repeat_times_entry.get())
+                    interval = int(interval_entry.get())
 
-                    self.set_short_cut(activate_key)
+                    self.set_short_cut(activation_key)
+
+                    self.create_json_config(activation_key, in_game_key, repeat_times, interval)
 
                     hotkey_window_config.destroy()
             except Exception as e:
@@ -138,6 +156,9 @@ class MainWindow(QMainWindow):
         repeat_times_label = Label(frame, text="Repeat:", width=15, anchor=W)
         repeat_times_entry = Entry(frame, width=20)
 
+        interval_label = Label(frame, text="Interval:", width=15, anchor=W)
+        interval_entry = Entry(frame, width=20)
+
         activation_key_label.grid(row=0, column=0, pady=5)
         activation_key_entry.grid(row=0, column=1, pady=5)
 
@@ -147,8 +168,23 @@ class MainWindow(QMainWindow):
         repeat_times_label.grid(row=2, column=0, pady=5)
         repeat_times_entry.grid(row=2, column=1, pady=5)
 
+        interval_label.grid(row=3, column=0, pady=5)
+        interval_entry.grid(row=3, column=1, pady=5)
+
         button_save = Button(text="Save", width=10, height=1, command=save)
         button_save.pack()
+
+        try:
+            if json_location.exists():
+                with open(json_location) as js:
+                    dados = json.load(js)
+
+                    activation_key_entry.insert(0, dados["activation_key"])
+                    in_game_hotkey_entry.insert(0, dados["in_game_key"])
+                    repeat_times_entry.insert(0, dados["repeat_times"])
+                    interval_entry.insert(0, dados["interval"])
+        except Exception as e:
+            messagebox.showerror("Error", e)
 
         hotkey_window_config.mainloop()
 
@@ -169,6 +205,25 @@ class MainWindow(QMainWindow):
             w.showMaximized(self)
         else:
             w.showFullScreen(self)
+
+    def create_json_config(self, activation_key, in_game_key, repeat_times, interval):
+
+        try:
+            data = {}
+
+            data["activation_key"] = activation_key
+            data["in_game_key"] = in_game_key
+            data["repeat_times"] = repeat_times
+            data["interval"] = interval
+
+            json_data = json.dumps(data)
+
+            save_json = open(json_file, "w")
+            save_json.write(str(json_data))
+            save_json.close()
+
+        except Exception as e:
+            messagebox.showerror("Error", e)
 
 
 app = QApplication(sys.argv)
