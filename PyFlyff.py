@@ -206,15 +206,12 @@ class MainWindow(QMainWindow):
         else:
             w.showFullScreen(self)
 
-    def create_json_config(self, activation_key, in_game_key, repeat_times, interval):
+    @staticmethod
+    def create_json_config(value1, value2, value3, value4):
 
         try:
-            data = {}
-
-            data["activation_key"] = activation_key
-            data["in_game_key"] = in_game_key
-            data["repeat_times"] = repeat_times
-            data["interval"] = interval
+            data = {"activation_key": value1, "in_game_key": value2, "repeat_times": value3,
+                    "interval": value4}
 
             json_data = json.dumps(data)
 
