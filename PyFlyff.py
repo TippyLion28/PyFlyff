@@ -14,6 +14,7 @@ icon = "icons/flyffu.ico"
 
 key_to_press = ""
 repeat_times = 0
+break_loop = False
 
 
 class MainWindow(QMainWindow):
@@ -45,28 +46,38 @@ class MainWindow(QMainWindow):
         self.autoKey = QShortcut(self)
         self.autoKey.activated.connect(lambda: self.multithreading(self.auto_key_press))
 
+        self.break_auto_hotkey = QShortcut(QKeySequence("End"), self)
+        self.break_auto_hotkey.activated.connect(self.break_the_loop)
+
         self.windows = []
 
     def set_short_cut(self, shortcut):
         self.autoKey.setKey(shortcut)
 
     def auto_key_press(self):
+        global break_loop
 
         counter = 0
 
         try:
             while True:
 
-                if counter < repeat_times:
+                if counter < repeat_times and break_loop is False:
                     pyautogui.press(key_to_press)
 
                     pyautogui.sleep(2)
 
                     counter += 1
                 else:
+                    break_loop = False
                     break
         except Exception as e:
             messagebox.showerror("Error", e)
+
+    def break_the_loop(self):
+        global break_loop
+
+        break_loop = True
 
     def auto_hotkey_config(self):
 
