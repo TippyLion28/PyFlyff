@@ -1,13 +1,16 @@
 import sys
+
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QToolBar, QAction
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtGui import QIcon
+
+from tkinter import Tk, Frame, Label, Entry, Button, X, W
+from tkinter import messagebox
+
 import pyautogui
 import threading
-from tkinter import *
-from tkinter import messagebox
 
 url = "https://universe.flyff.com/play"
 icon = "icons/flyffu.ico"
@@ -41,7 +44,7 @@ class MainWindow(QMainWindow):
         self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow))
 
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
-        self.new_client.activated.connect(self.new_window)
+        self.new_client.activated.connect(self.create_new_window)
 
         self.autoKey = QShortcut(self)
         self.autoKey.activated.connect(lambda: self.multithreading(self.auto_key_press))
@@ -54,7 +57,8 @@ class MainWindow(QMainWindow):
     def set_short_cut(self, shortcut):
         self.autoKey.setKey(shortcut)
 
-    def auto_key_press(self):
+    @staticmethod
+    def auto_key_press():
         global break_loop
 
         counter = 0
@@ -74,18 +78,19 @@ class MainWindow(QMainWindow):
         except Exception as e:
             messagebox.showerror("Error", e)
 
-    def break_the_loop(self):
+    @staticmethod
+    def break_the_loop():
         global break_loop
 
         break_loop = True
 
     def auto_hotkey_config(self):
 
-        window = Tk()
-        window.geometry("220x150")
-        window.resizable(False, False)
-        window.title("Config")
-        window.iconbitmap("icons/flyffu.ico")
+        hotkey_window_config = Tk()
+        hotkey_window_config.geometry("220x150")
+        hotkey_window_config.resizable(False, False)
+        hotkey_window_config.title("Config")
+        hotkey_window_config.iconbitmap("icons/flyffu.ico")
 
         def save():
             global key_to_press
@@ -101,7 +106,7 @@ class MainWindow(QMainWindow):
 
                     self.set_short_cut(activate_key)
 
-                    window.destroy()
+                    hotkey_window_config.destroy()
             except Exception as e:
                 messagebox.showerror("Error", e)
 
@@ -130,18 +135,19 @@ class MainWindow(QMainWindow):
         button_save = Button(text="Save", width=10, height=2, command=save)
         button_save.pack()
 
-        window.mainloop()
+        hotkey_window_config.mainloop()
 
-    def multithreading(self, function):
+    @staticmethod
+    def multithreading(function):
         threading.Thread(target=function).start()
 
-    def new_window(self):
-        self.nw = QWebEngineView()
-        self.nw.load(QUrl(url))
-        self.nw.setWindowIcon(QIcon(icon))
-        self.nw.showMaximized()
+    def create_new_window(self):
+        self.new_window = QWebEngineView()
+        self.new_window.load(QUrl(url))
+        self.new_window.setWindowIcon(QIcon(icon))
+        self.new_window.showMaximized()
 
-        self.windows.append(self.nw)
+        self.windows.append(self.new_window)
 
     def fullscreen(self, w):
         if w.isFullScreen(self):
