@@ -9,4 +9,6 @@ Ctrl+Shift+F11 = enter/exit main window fullscreen
 
 Ctrl+Shift+PgUp (PageUp) open a new client window
 
+# Features
+
 You can configure a small Auto Hotkey script within the Client
