@@ -49,8 +49,8 @@ class MainWindow(QMainWindow):
         self.autoKey = QShortcut(self)
         self.autoKey.activated.connect(lambda: self.multithreading(self.auto_key_press))
 
-        self.break_auto_hotkey = QShortcut(QKeySequence("End"), self)
-        self.break_auto_hotkey.activated.connect(self.break_the_loop)
+        self.break_auto_hotkey_loop = QShortcut(QKeySequence("End"), self)
+        self.break_auto_hotkey_loop.activated.connect(self.break_the_loop)
 
         self.windows = []
 
@@ -62,6 +62,9 @@ class MainWindow(QMainWindow):
         global break_loop
 
         counter = 0
+
+        if break_loop:
+            break_loop = False
 
         try:
             while True:
