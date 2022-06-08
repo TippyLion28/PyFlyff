@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
         navbar = QToolBar()
         self.addToolBar(navbar)
 
-        auto_hotkey = QAction("Set Auto Hotkey", self)
+        auto_hotkey = QAction("Mini FTool", self)
         auto_hotkey.triggered.connect(lambda: self.multithreading(self.auto_hotkey_config))
         navbar.addAction(auto_hotkey)
 
