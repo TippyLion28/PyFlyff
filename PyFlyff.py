@@ -26,6 +26,7 @@ json_file = "AutoHotKey.json"
 json_location = pathlib.Path("AutoHotKey.json")
 
 break_loop = False
+start_autohotkey = False
 
 
 class MainWindow(QMainWindow):
@@ -55,7 +56,7 @@ class MainWindow(QMainWindow):
         self.new_client.activated.connect(self.create_new_window)
 
         self.autoKey = QShortcut(self)
-        self.autoKey.activated.connect(lambda: self.multithreading(self.auto_key_press))
+        self.autoKey.activated.connect(self.start_auto_hotkey)
 
         self.break_auto_hotkey_loop = QShortcut(QKeySequence("End"), self)
         self.break_auto_hotkey_loop.activated.connect(self.break_the_loop)
@@ -70,9 +71,6 @@ class MainWindow(QMainWindow):
         global break_loop
 
         counter = 0
-
-        if break_loop:
-            break_loop = False
 
         try:
             while True:
@@ -92,8 +90,17 @@ class MainWindow(QMainWindow):
     @staticmethod
     def break_the_loop():
         global break_loop
+        global start_autohotkey
 
         break_loop = True
+        start_autohotkey = False
+
+    def start_auto_hotkey(self):
+        global start_autohotkey
+
+        if not start_autohotkey:
+            start_autohotkey = True
+            self.multithreading(self.auto_key_press)
 
     def auto_hotkey_config(self):
 
@@ -125,7 +132,8 @@ class MainWindow(QMainWindow):
             global interval
 
             try:
-                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                if (
+                        activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                     messagebox.showerror("Error", "Fields cannot be empty.")
                 elif activation_key_entry.get() == in_game_hotkey_entry.get():
                     messagebox.showerror("Error", "Activate Key and Pressed Key must be different.")
