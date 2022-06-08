@@ -25,7 +25,6 @@ interval = 0
 json_file = "AutoHotKey.json"
 json_location = pathlib.Path("AutoHotKey.json")
 
-break_loop = False
 start_autohotkey = False
 
 
@@ -59,7 +58,7 @@ class MainWindow(QMainWindow):
         self.autoKey.activated.connect(self.start_auto_hotkey)
 
         self.break_auto_hotkey_loop = QShortcut(QKeySequence("End"), self)
-        self.break_auto_hotkey_loop.activated.connect(self.break_the_loop)
+        self.break_auto_hotkey_loop.activated.connect(self.stop_auto_hotkey)
 
         self.windows = []
 
@@ -68,31 +67,28 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def auto_key_press():
-        global break_loop
+        global start_autohotkey
 
         counter = 0
 
         try:
             while True:
 
-                if counter < repeat_times and break_loop is False:
+                if counter < repeat_times and start_autohotkey is True:
                     pyautogui.press(in_game_key)
 
                     pyautogui.sleep(interval)
 
                     counter += 1
                 else:
-                    break_loop = False
                     break
         except Exception as e:
-            messagebox.showerror("Error", e)
+            messagebox.showerror("Error", str(e))
 
     @staticmethod
-    def break_the_loop():
-        global break_loop
+    def stop_auto_hotkey():
         global start_autohotkey
 
-        break_loop = True
         start_autohotkey = False
 
     def start_auto_hotkey(self):
@@ -149,7 +145,7 @@ class MainWindow(QMainWindow):
 
                     hotkey_window_config.destroy()
             except Exception as e:
-                messagebox.showerror("Error", e)
+                messagebox.showerror("Error", str(e))
 
         frame = Frame()
 
@@ -192,7 +188,7 @@ class MainWindow(QMainWindow):
                     repeat_times_entry.insert(0, dados["repeat_times"])
                     interval_entry.insert(0, dados["interval"])
         except Exception as e:
-            messagebox.showerror("Error", e)
+            messagebox.showerror("Error", str(e))
 
         hotkey_window_config.mainloop()
 
@@ -228,7 +224,7 @@ class MainWindow(QMainWindow):
             save_json.close()
 
         except Exception as e:
-            messagebox.showerror("Error", e)
+            messagebox.showerror("Error", str(e))
 
 
 app = QApplication(sys.argv)
