@@ -9,8 +9,10 @@ Ctrl+Shift+F11 = enter/exit main window fullscreen
 
 Ctrl+Shift+PgUp (PageUp) open a new client window
 
-"End" keyboard key stops the Auto Hotkey loop
-
 # Features
 
-You can configure a small Auto Hotkey script within the Client
+There is a Mini FTool within the client. You can configure it to spam heals with your RM, and the keys are send even if the Main Window is on the Background, making it a 100% AFKable hotkey spammer. Try to not abuse it much, you might get banned. It is there more to aliviate key spam during gameplay.
+
+The key to stop the Mini FTool is "End" on your Keyboard.
+
+Also, this only works on Windows, since I'm using Win32 APIs.
