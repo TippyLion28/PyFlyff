@@ -60,8 +60,8 @@ class MainWindow(QMainWindow):
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
         self.new_client.activated.connect(self.create_new_window)
 
-        self.autoKey = QShortcut(self)
-        self.autoKey.activated.connect(self.start_ftool)
+        self.ftoolkey = QShortcut(self)
+        self.ftoolkey.activated.connect(self.start_ftool)
 
         self.break_auto_hotkey_loop = QShortcut(QKeySequence("End"), self)
         self.break_auto_hotkey_loop.activated.connect(self.stop_ftool)
@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
         self.windows = []
 
     def set_short_cut(self, shortcut):
-        self.autoKey.setKey(shortcut)
+        self.ftoolkey.setKey(shortcut)
 
     @staticmethod
     def ftool_loop():
