@@ -27,10 +27,10 @@ hwndMain = ""
 repeat_times = 0
 interval = 0
 
-json_file = "AutoHotKey.json"
-json_location = pathlib.Path("AutoHotKey.json")
+json_file = "FToolConfig.json"
+json_location = pathlib.Path("FToolConfig.json")
 
-start_autohotkey = False
+start_ftool_loop = False
 
 
 class MainWindow(QMainWindow):
@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.addToolBar(navbar)
 
         auto_hotkey = QAction("Mini FTool", self)
-        auto_hotkey.triggered.connect(lambda: self.multithreading(self.auto_hotkey_config))
+        auto_hotkey.triggered.connect(lambda: self.multithreading(self.ftool_config))
         navbar.addAction(auto_hotkey)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
@@ -61,10 +61,10 @@ class MainWindow(QMainWindow):
         self.new_client.activated.connect(self.create_new_window)
 
         self.autoKey = QShortcut(self)
-        self.autoKey.activated.connect(self.start_auto_hotkey)
+        self.autoKey.activated.connect(self.start_ftool)
 
         self.break_auto_hotkey_loop = QShortcut(QKeySequence("End"), self)
-        self.break_auto_hotkey_loop.activated.connect(self.stop_auto_hotkey)
+        self.break_auto_hotkey_loop.activated.connect(self.stop_ftool)
 
         self.windows = []
 
@@ -72,8 +72,8 @@ class MainWindow(QMainWindow):
         self.autoKey.setKey(shortcut)
 
     @staticmethod
-    def auto_key_press():
-        global start_autohotkey
+    def ftool_loop():
+        global start_ftool_loop
         global hwndMain
         global in_game_key
 
@@ -82,7 +82,7 @@ class MainWindow(QMainWindow):
         try:
             while True:
 
-                if counter < repeat_times and start_autohotkey is True:
+                if counter < repeat_times and start_ftool_loop is True:
 
                     win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, in_game_key, 0)
                     time.sleep(0.5)
@@ -97,22 +97,22 @@ class MainWindow(QMainWindow):
             messagebox.showerror("Error", str(e))
 
     @staticmethod
-    def stop_auto_hotkey():
-        global start_autohotkey
+    def stop_ftool():
+        global start_ftool_loop
 
-        start_autohotkey = False
+        start_ftool_loop = False
 
-    def start_auto_hotkey(self):
-        global start_autohotkey
+    def start_ftool(self):
+        global start_ftool_loop
         global hwndMain
 
         hwndMain = win32gui.FindWindow(None, "PyFlyff - Main")
 
-        if not start_autohotkey:
-            start_autohotkey = True
-            self.multithreading(self.auto_key_press)
+        if not start_ftool_loop:
+            start_ftool_loop = True
+            self.multithreading(self.ftool_loop)
 
-    def auto_hotkey_config(self):
+    def ftool_config(self):
 
         global activation_key
         global in_game_key
@@ -288,8 +288,7 @@ class MainWindow(QMainWindow):
                        "'": 0xDE}
 
             try:
-                if (
-                        activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                     messagebox.showerror("Error", "Fields cannot be empty.")
                 elif activation_key_entry.get() == in_game_hotkey_entry.get():
                     messagebox.showerror("Error", "Activate Key and Pressed Key must be different.")
