@@ -363,6 +363,7 @@ class MainWindow(QMainWindow):
     def create_new_window(self):
         self.new_window = QWebEngineView()
         self.new_window.load(QUrl(url))
+        self.new_window.setWindowTitle("PyFlyff - Alt")
         self.new_window.setWindowIcon(QIcon(icon))
         self.new_window.showMaximized()
 
