@@ -108,8 +108,6 @@ class MainWindow(QMainWindow):
 
         hwndMain = win32gui.FindWindow(None, "PyFlyff - Main")
 
-        print(hwndMain)
-
         if not start_autohotkey:
             start_autohotkey = True
             self.multithreading(self.auto_key_press)
