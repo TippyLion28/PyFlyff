@@ -2,6 +2,7 @@ import json
 import pathlib
 import sys
 import time
+import tkinter
 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QToolBar, QAction
@@ -11,6 +12,8 @@ from PyQt5.QtGui import QIcon
 
 from tkinter import Tk, Frame, Label, Entry, Button, X, W
 from tkinter import messagebox
+
+import random
 
 import threading
 
@@ -24,17 +27,24 @@ icon = "icons/flyffu.ico"
 activation_key = ""
 in_game_key = ""
 hwndMain = ""
+user_agent = ""
 repeat_times = 0
 interval = 0
 
-json_file = "FToolConfig.json"
-json_location = pathlib.Path("FToolConfig.json")
+ftool_json_file = "FToolConfig.json"
+ftool_json_file_location = pathlib.Path("FToolConfig.json")
+
+user_agent_json_file = "UserAgent.json"
+user_agent_json_file_location = pathlib.Path("UserAgent.json")
 
 start_ftool_loop = False
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
+
+        global user_agent
+
         super(MainWindow, self).__init__()
 
         self.browser = QWebEngineView()
@@ -47,9 +57,13 @@ class MainWindow(QMainWindow):
         navbar = QToolBar()
         self.addToolBar(navbar)
 
-        auto_hotkey = QAction("Mini FTool", self)
-        auto_hotkey.triggered.connect(lambda: self.multithreading(self.ftool_config))
-        navbar.addAction(auto_hotkey)
+        ftool = QAction("Mini FTool", self)
+        ftool.triggered.connect(lambda: self.multithreading(self.ftool_config))
+        navbar.addAction(ftool)
+
+        ua = QAction("Set User Agent", self)
+        ua.triggered.connect(lambda: self.multithreading(self.set_user_agent))
+        navbar.addAction(ua)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
         self.reload_client.activated.connect(lambda: self.browser.setUrl(QUrl(url)))
@@ -67,6 +81,21 @@ class MainWindow(QMainWindow):
         self.break_auto_hotkey_loop.activated.connect(self.stop_ftool)
 
         self.windows = []
+
+        try:
+            if user_agent_json_file_location.exists():
+                with open(user_agent_json_file_location) as js:
+                    data = json.load(js)
+                    user_agent = data["user_agent"]
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+        if user_agent == "":
+            self.browser.page().profile().setHttpUserAgent(
+                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+        else:
+            self.browser.page().profile().setHttpUserAgent(user_agent)
 
     def set_short_cut(self, shortcut):
         self.ftoolkey.setKey(shortcut)
@@ -88,7 +117,9 @@ class MainWindow(QMainWindow):
                     time.sleep(0.5)
                     win32api.SendMessage(hwndMain, win32con.WM_KEYUP, in_game_key, 0)
 
-                    time.sleep(interval)
+                    random_interval = random.uniform(interval, interval + 1)
+
+                    time.sleep(random_interval)
 
                     counter += 1
                 else:
@@ -119,21 +150,21 @@ class MainWindow(QMainWindow):
         global repeat_times
         global interval
 
-        hotkey_window_config = Tk()
+        ftool_config_window = Tk()
 
         window_width = 250
         window_height = 140
 
-        screen_width = hotkey_window_config.winfo_screenwidth()
-        screen_height = hotkey_window_config.winfo_screenheight()
+        screen_width = ftool_config_window.winfo_screenwidth()
+        screen_height = ftool_config_window.winfo_screenheight()
 
         x = (screen_width / 2) - (window_width / 2)
         y = (screen_height / 2) - (window_height / 2)
 
-        hotkey_window_config.geometry("250x170+" + str(int(x)) + "+" + str(int(y)))
-        hotkey_window_config.resizable(False, False)
-        hotkey_window_config.title("Config")
-        hotkey_window_config.iconbitmap("icons/flyffu.ico")
+        ftool_config_window.geometry("250x170+" + str(int(x)) + "+" + str(int(y)))
+        ftool_config_window.resizable(False, False)
+        ftool_config_window.title("Config")
+        ftool_config_window.iconbitmap("icons/flyffu.ico")
 
         def save():
             global activation_key
@@ -288,14 +319,15 @@ class MainWindow(QMainWindow):
                        "'": 0xDE}
 
             try:
-                if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                if (
+                        activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                     messagebox.showerror("Error", "Fields cannot be empty.")
                 elif activation_key_entry.get() == in_game_hotkey_entry.get():
                     messagebox.showerror("Error", "Activate Key and Pressed Key must be different.")
                 else:
 
-                    self.create_json_config(activation_key_entry.get(), in_game_hotkey_entry.get(),
-                                            repeat_times_entry.get(), interval_entry.get())
+                    self.ftool_json_config(activation_key_entry.get(), in_game_hotkey_entry.get(),
+                                           repeat_times_entry.get(), interval_entry.get())
 
                     activation_key = activation_key_entry.get()
                     in_game_key = vk_code.get(in_game_hotkey_entry.get())
@@ -304,7 +336,7 @@ class MainWindow(QMainWindow):
 
                     self.set_short_cut(activation_key)
 
-                    hotkey_window_config.destroy()
+                    ftool_config_window.destroy()
             except Exception as e:
                 messagebox.showerror("Error", str(e))
 
@@ -340,8 +372,8 @@ class MainWindow(QMainWindow):
         button_save.pack()
 
         try:
-            if json_location.exists():
-                with open(json_location) as js:
+            if ftool_json_file_location.exists():
+                with open(ftool_json_file_location) as js:
                     data = json.load(js)
 
                     activation_key_entry.insert(0, data["activation_key"])
@@ -351,7 +383,54 @@ class MainWindow(QMainWindow):
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
-        hotkey_window_config.mainloop()
+        ftool_config_window.mainloop()
+
+    def set_user_agent(self):
+        global user_agent
+
+        user_agent_config_window = Tk()
+
+        window_width = 300
+        window_height = 130
+
+        screen_width = user_agent_config_window.winfo_screenwidth()
+        screen_height = user_agent_config_window.winfo_screenheight()
+
+        x = (screen_width / 2) - (window_width / 2)
+        y = (screen_height / 2) - (window_height / 2)
+
+        user_agent_config_window.geometry("300x130+" + str(int(x)) + "+" + str(int(y)))
+        user_agent_config_window.resizable(False, False)
+        user_agent_config_window.title("User Agent")
+        user_agent_config_window.iconbitmap("icons/flyffu.ico")
+
+        def save():
+            try:
+                if user_agent_entry.get() == "":
+                    messagebox.showerror("Error", "Field cannot be empty.")
+                else:
+
+                    self.user_agent_json_config(user_agent_entry.get())
+
+                    user_agent_config_window.destroy()
+            except Exception as e:
+                messagebox.showerror("Error", str(e))
+
+        user_agent_label = Label(user_agent_config_window, text="Set your User Agent below:", width=30)
+        user_agent_entry = Entry(user_agent_config_window, width=40)
+        restart_label = Label(user_agent_config_window, text="After setting your User Agent, restart the Client.",
+                              width=50)
+
+        user_agent_label.pack(pady=5)
+        user_agent_entry.pack(pady=5)
+        restart_label.pack(pady=5)
+
+        button_save = Button(text="Save", width=10, height=1, command=save)
+        button_save.pack(pady=5)
+
+        user_agent_entry.insert(0, user_agent)
+
+        user_agent_config_window.mainloop()
 
     @staticmethod
     def multithreading(function):
@@ -364,6 +443,12 @@ class MainWindow(QMainWindow):
         self.new_window.setWindowIcon(QIcon(icon))
         self.new_window.showMaximized()
 
+        if user_agent == "":
+            self.new_window.page().profile().setHttpUserAgent(
+                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+        else:
+            self.new_window.page().profile().setHttpUserAgent(user_agent)
+
         self.windows.append(self.new_window)
 
     def fullscreen(self, w):
@@ -373,7 +458,7 @@ class MainWindow(QMainWindow):
             w.showFullScreen(self)
 
     @staticmethod
-    def create_json_config(value1, value2, value3, value4):
+    def ftool_json_config(value1, value2, value3, value4):
 
         try:
             data = {"activation_key": value1, "in_game_key": value2, "repeat_times": value3,
@@ -381,7 +466,22 @@ class MainWindow(QMainWindow):
 
             json_data = json.dumps(data)
 
-            save_json = open(json_file, "w")
+            save_json = open(ftool_json_file, "w")
+            save_json.write(str(json_data))
+            save_json.close()
+
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    @staticmethod
+    def user_agent_json_config(value):
+
+        try:
+            data = {"user_agent": value}
+
+            json_data = json.dumps(data)
+
+            save_json = open(user_agent_json_file, "w")
             save_json.write(str(json_data))
             save_json.close()
 
