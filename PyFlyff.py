@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
                     time.sleep(0.5)
                     win32api.SendMessage(hwndMain, win32con.WM_KEYUP, in_game_key, 0)
 
-                    random_interval = random.uniform(interval, interval + 1)
+                    random_interval = random.uniform(0, interval + 1)
 
                     time.sleep(random_interval)
 
@@ -331,7 +331,7 @@ class MainWindow(QMainWindow):
                     activation_key = activation_key_entry.get()
                     in_game_key = vk_code.get(in_game_hotkey_entry.get())
                     repeat_times = int(repeat_times_entry.get())
-                    interval = int(interval_entry.get())
+                    interval = float(interval_entry.get())
 
                     self.set_short_cut(activation_key)
 
