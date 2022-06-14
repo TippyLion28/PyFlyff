@@ -25,7 +25,7 @@ User Agent: This is optional. User Agent is the software that is being used duri
 
 As you can see, I added bot like features to my Client. They are simple, yet, very convenient tools to make the grind a bit more bearable, but keep in mind that using automation is illegal and you might get banned for it. The Mini Ftool generate a random wait time for every repeatable action, but this does not prevent from a GM to identify that you are in fact botting, so try to not abuse it, you have been very much warned.
 
-And no, I won't make a fully functional Ftool in my client, this takes time to make (something I don't have much) and to debug, and will just encourage botting, and I don't want that. Be happy that You can spam one key and send one key to your alt. Play the damn game, dude.
+And no, I won't make a fully functional Ftool in my client, this takes time to make (something I don't have much) and to debug, and will just encourage botting, and I don't want that. Be happy that You can spam one key and send one key to your alt. Just try to play the game "fair".
 
 I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
 
