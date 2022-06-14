@@ -487,6 +487,8 @@ class MainWindow(QMainWindow):
                 try:
                     if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
+                    elif main_client_hotkey_entry.get() == alt_client_hotkey_entry.get():
+                        messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
                     elif main_client_hotkey_entry.get() == ftool_activation_key:
                         messagebox.showerror("Error",
                                              "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
