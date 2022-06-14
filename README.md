@@ -29,6 +29,14 @@ And no, I won't make a fully functional Ftool in my client, this takes time to m
 
 I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
 
+# Android Client
+
 I also made an Android Client that makes it easier for your to Dual Client using your Android Device.
 
 Here is the link: https://github.com/ils94/FlyffUWebViewClient
+
+#  Donations
+
+I didn't think of receiving donates for this, since I just like to code as a hobby, but if you want to tip me I would love some ADA Cardano cryptocurrency :)
+
+Here is my address: addr1q9ez0lgwrult58fcm2x7wh0d62v20gtpxh7szlly2zsn75kgga3cu427gtnywnn60jcuaj7r2tnqp6ltj7atveyta53seegl5t
