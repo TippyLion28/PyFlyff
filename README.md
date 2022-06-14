@@ -9,14 +9,26 @@ Ctrl+Shift+F11 = enter/exit main window fullscreen
 
 Ctrl+Shift+PgUp (PageUp) open a new client window
 
+"End" key is used to stop the loop of Mini FTool
+
 # Features
 
-There is a Mini FTool within the client. You can configure it to spam heals with your FS/RM, and the keys are send even if the Main Window is on the Background, making it a 100% AFKable hotkey spammer. Try to not abuse it much, you might get banned. It is there more to aliviate key spam during gameplay.
+Mini Ftool: You can setup an auto hotkey to automatically press a button for you (good for heal spam or mage/psy/elementor 1x1)
 
-The key to stop the Mini FTool is "End" on your Keyboard.
+Alt Control: You can set a hotkey on the Main Client to send a direct command to the Alt Client. Good if you don't want to use the Mini Ftool, but still want to command your FS/RM to heal you without having to alt+tab.
 
-Also, this only works on Windows, since I'm using Win32 APIs.
+Reset Hotkeys: Clear the variables values from Mini Ftool and Alt Control keys as well as the variable containing the value that is used to identify which windows is the Main Client and which window is the Alt Client. Good in case you want to switch keys on both Mini Ftool and Alt Control without the need of completly restarting the PyFlyff Client.
 
-You can control the Alt Client by sending a hotkey command from the Main Client, meaning that you can command your FS/RM to heal you without having to alt-tab and pressing the hotkey where the healing skill is. This will make it easier to also play with your FS/RM while also playing with your main character and encourage less afkable bot heal spam with the Mini Ftool.
+User Agent: This is optional. User Agent is the software that is being used during the interaction of any web content, you can leave it alone and it will use the default User Agent, or, you can set any User Agent to spoof yourself. I added it just in case.
 
-Keep in mind that I'll never implement a full bot like feature into my client, and if you get caught by some GM where him/her sees you acting like a botter using automated behavior to heal you, you will probably get banned. This "Alt Control" feature I implemented should be more than enough to play with your FS/RM to heal you without losing focus from your main character and without getting banned since it not automated, you are still pressing keys.
+# Desclaimer
+
+As you can see, I added bot like features to my Client. They are simple, yet, very convenient tools to make the grind a bit more bearable, but keep in mind that using automation is illegal and you might get banned for it. The Mini Ftool generate a random wait time for every repeatable action, but this does not prevent from a GM to identify that you are in fact botting, so try to not abuse it, you have been very much warned.
+
+And no, I won't make a fully functional Ftool in my client, this takes time to make (something I don't have much) and to debug, and will just encourage botting, and I don't want that. Be happy that You can spam one key and send one key to your alt. Play the damn game, dude.
+
+I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
+
+I also made a Android Client that makes it easier for your to Dual Client using your Android Device.
+
+Here is the link: https://github.com/ils94/FlyffUWebViewClient
