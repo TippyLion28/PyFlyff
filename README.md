@@ -37,6 +37,6 @@ Here is the link: https://github.com/ils94/FlyffUWebViewClient
 
 #  Donations
 
-I didn't think of receiving donates for this, since I just like to code as a hobby, but if you want to tip me I would love some ADA Cardano cryptocurrency :)
+I didn't think of receiving donates for this, since I just like to code as a hobby, but since someone asked if they could donate something for me, here is my Cardano address if you would like to give me some ADA cryptocurrency :)
 
 Here is my address: addr1q9ez0lgwrult58fcm2x7wh0d62v20gtpxh7szlly2zsn75kgga3cu427gtnywnn60jcuaj7r2tnqp6ltj7atveyta53seegl5t
