@@ -377,8 +377,7 @@ class MainWindow(QMainWindow):
                 global toolbar_window
 
                 try:
-                    if (
-                            activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                    if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
                     elif activation_key_entry.get() == in_game_hotkey_entry.get():
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
@@ -486,20 +485,17 @@ class MainWindow(QMainWindow):
                 global toolbar_window
 
                 try:
-                    if (
-                            activation_key_entry.get() and in_game_hotkey_entry.get()) == "":
+                    if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
-                    elif activation_key_entry.get() == in_game_hotkey_entry.get():
-                        messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
-                    elif activation_key_entry.get() == ftool_activation_key:
+                    elif main_client_hotkey_entry.get() == ftool_activation_key:
                         messagebox.showerror("Error",
-                                             "Main Client HotKey from Alt Control config cannot be the same as the Mini Ftool Activation Key.")
+                                             "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
 
-                        self.alt_control_json_config(activation_key_entry.get(), in_game_hotkey_entry.get())
+                        self.alt_control_json_config(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get())
 
-                        alt_control_activation_key = activation_key_entry.get()
-                        alt_control_ingame_key = vk_code.get(in_game_hotkey_entry.get())
+                        alt_control_activation_key = main_client_hotkey_entry.get()
+                        alt_control_ingame_key = vk_code.get(alt_client_hotkey_entry.get())
 
                         self.set_alt_control_short_cut(alt_control_activation_key)
 
@@ -521,17 +517,17 @@ class MainWindow(QMainWindow):
 
             frame.pack(fill=X, padx=5, pady=5)
 
-            activation_key_label = Label(frame, text="Main Client Hotkey:", width=20, anchor=W)
-            activation_key_entry = Entry(frame, width=10)
+            main_client_hotkey_label = Label(frame, text="Main Client Hotkey:", width=20, anchor=W)
+            main_client_hotkey_entry = Entry(frame, width=10)
 
-            in_game_hotkey_label = Label(frame, text="Alt Client Hotkey:", width=20, anchor=W)
-            in_game_hotkey_entry = Entry(frame, width=10)
+            alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey:", width=20, anchor=W)
+            alt_client_hotkey_entry = Entry(frame, width=10)
 
-            activation_key_label.grid(row=0, column=0, pady=5)
-            activation_key_entry.grid(row=0, column=1, pady=5)
+            main_client_hotkey_label.grid(row=0, column=0, pady=5)
+            main_client_hotkey_entry.grid(row=0, column=1, pady=5)
 
-            in_game_hotkey_label.grid(row=1, column=0, pady=5)
-            in_game_hotkey_entry.grid(row=1, column=1, pady=5)
+            alt_client_hotkey_label.grid(row=1, column=0, pady=5)
+            alt_client_hotkey_entry.grid(row=1, column=1, pady=5)
 
             button_start = Button(text="Start", width=10, height=1, command=start)
             button_start.pack(side=LEFT, padx=25)
@@ -544,8 +540,8 @@ class MainWindow(QMainWindow):
                     with open(alt_control_json_file_location) as js:
                         data = json.load(js)
 
-                        activation_key_entry.insert(0, data["activation_key"])
-                        in_game_hotkey_entry.insert(0, data["in_game_key"])
+                        main_client_hotkey_entry.insert(0, data["activation_key"])
+                        alt_client_hotkey_entry.insert(0, data["in_game_key"])
             except Exception as e:
                 messagebox.showerror("Error", str(e))
 
