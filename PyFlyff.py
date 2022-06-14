@@ -25,6 +25,7 @@ icon = "icons/flyffu.ico"
 
 ftool_activation_key = ""
 ftool_in_game_key = ""
+
 alt_control_activation_key = ""
 alt_control_ingame_key = ""
 
@@ -35,6 +36,8 @@ user_agent = ""
 repeat_times = 0
 interval = 0
 
+start_ftool_loop = False
+alt_control_boolean = False
 toolbar_window = False
 
 ftool_json_file = "FToolConfig.json"
@@ -45,9 +48,6 @@ alt_control_json_file_location = pathlib.Path(alt_control_json_file)
 
 user_agent_json_file = "UserAgent.json"
 user_agent_json_file_location = pathlib.Path(user_agent_json_file)
-
-start_ftool_loop = False
-alt_control_boolean = False
 
 vk_code = {'backspace': 0x08,
            'tab': 0x09,
