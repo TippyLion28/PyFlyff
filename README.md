@@ -21,7 +21,7 @@ Reset Hotkeys: Clear the variables values from Mini Ftool and Alt Control keys a
 
 User Agent: This is optional. User Agent is the software that is being used during the interaction of any web content, you can leave it alone and it will use the default User Agent, or, you can set any User Agent to spoof yourself. I added it just in case.
 
-# Desclaimer
+# Disclaimer
 
 As you can see, I added bot like features to my Client. They are simple, yet, very convenient tools to make the grind a bit more bearable, but keep in mind that using automation is illegal and you might get banned for it. The Mini Ftool generate a random wait time for every repeatable action, but this does not prevent from a GM to identify that you are in fact botting, so try to not abuse it, you have been very much warned.
 
