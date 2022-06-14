@@ -221,7 +221,7 @@ class MainWindow(QMainWindow):
         alt_control.triggered.connect(lambda: self.multithreading(self.alt_control_config))
         toolbar.addAction(alt_control)
 
-        clear_keys = QAction("Clear Hotkeys", self)
+        clear_keys = QAction("Reset Hotkeys", self)
         clear_keys.triggered.connect(self.clear_hotkeys)
         toolbar.addAction(clear_keys)
 
@@ -334,7 +334,7 @@ class MainWindow(QMainWindow):
 
         hwndMain = win32gui.FindWindow(None, "PyFlyff - Main")
 
-        if not start_ftool_loop:
+        if not start_ftool_loop and ftool_activation_key != "" and ftool_in_game_key != "":
             start_ftool_loop = True
             self.multithreading(self.ftool_loop)
 
@@ -377,7 +377,8 @@ class MainWindow(QMainWindow):
                 global toolbar_window
 
                 try:
-                    if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                    if (
+                            activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
                     elif activation_key_entry.get() == in_game_hotkey_entry.get():
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
@@ -556,7 +557,7 @@ class MainWindow(QMainWindow):
         global alt_control_boolean
         global hwndAlt
 
-        if alt_control_boolean:
+        if alt_control_boolean and alt_control_ingame_key != "" and alt_control_activation_key != "":
             hwndAlt = win32gui.FindWindow(None, "PyFlyff - Alt")
 
             win32api.SendMessage(hwndAlt, win32con.WM_KEYDOWN, alt_control_ingame_key, 0)
@@ -681,10 +682,15 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def clear_hotkeys():
+        global hwndMain
+        global hwndAlt
         global alt_control_activation_key
         global ftool_activation_key
         global alt_control_ingame_key
         global ftool_in_game_key
+
+        hwndMain = ""
+        hwndAlt = ""
 
         alt_control_activation_key = ""
         ftool_activation_key = ""
