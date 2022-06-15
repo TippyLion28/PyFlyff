@@ -314,6 +314,7 @@ class MainWindow(QMainWindow):
                     time.sleep(random_interval)
                     counter += 1
                 else:
+                    start_ftool_loop = False
                     break
         except Exception as e:
             messagebox.showerror("Error", str(e))
@@ -651,8 +652,8 @@ class MainWindow(QMainWindow):
         alt_control_ingame_key = ""
         ftool_in_game_key = ""
 
-        self.set_ftool_short_cut("")
-        self.set_alt_control_short_cut("")
+        self.ftool_key.setKey("")
+        self.alt_control_key.setKey("")
 
 
 app = QApplication(sys.argv)
