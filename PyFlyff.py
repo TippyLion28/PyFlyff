@@ -222,7 +222,7 @@ class MainWindow(QMainWindow):
         toolbar.addAction(alt_control)
 
         clear_keys = QAction("Reset Hotkeys", self)
-        clear_keys.triggered.connect(self.clear_hotkeys)
+        clear_keys.triggered.connect(self.reset_hotkeys)
         toolbar.addAction(clear_keys)
 
         ua = QAction("Set User Agent", self)
@@ -254,13 +254,11 @@ class MainWindow(QMainWindow):
                 with open(user_agent_json_file_location) as js:
                     data = json.load(js)
                     user_agent = data["user_agent"]
-
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
         if user_agent == "":
-            self.browser.page().profile().setHttpUserAgent(
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+            self.browser.page().profile().setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
         else:
             self.browser.page().profile().setHttpUserAgent(user_agent)
 
@@ -272,8 +270,7 @@ class MainWindow(QMainWindow):
         self.new_window.showMaximized()
 
         if user_agent == "":
-            self.new_window.page().profile().setHttpUserAgent(
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+            self.new_window.page().profile().setHttpUserAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
         else:
             self.new_window.page().profile().setHttpUserAgent(user_agent)
 
@@ -289,11 +286,15 @@ class MainWindow(QMainWindow):
             bar.toggleViewAction().setChecked(True)
             bar.toggleViewAction().trigger()
 
-    def set_ftool_short_cut(self, shortcut):
-        self.ftool_key.setKey(shortcut)
+    def set_short_cut(self, **kwargs):
 
-    def set_alt_control_short_cut(self, shortcut):
-        self.alt_control_key.setKey(shortcut)
+        config = kwargs.get("config")
+        key = kwargs.get("key")
+
+        if config == "ftool":
+            self.ftool_key.setKey(key)
+        if config == "altcontrol":
+            self.alt_control_key.setKey(key)
 
     @staticmethod
     def ftool_loop():
@@ -305,17 +306,12 @@ class MainWindow(QMainWindow):
 
         try:
             while True:
-
                 if counter < repeat_times and start_ftool_loop is True:
-
                     win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, ftool_in_game_key, 0)
                     time.sleep(0.5)
                     win32api.SendMessage(hwndMain, win32con.WM_KEYUP, ftool_in_game_key, 0)
-
                     random_interval = random.uniform(0, interval + 1)
-
                     time.sleep(random_interval)
-
                     counter += 1
                 else:
                     break
@@ -375,30 +371,23 @@ class MainWindow(QMainWindow):
                 global interval
                 global vk_code
                 global toolbar_window
+                global ftool_json_file
 
                 try:
-                    if (
-                            activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                    if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
                     elif activation_key_entry.get() == in_game_hotkey_entry.get():
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
                     elif activation_key_entry.get() == alt_control_activation_key:
-                        messagebox.showerror("Error",
-                                             "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
+                        messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
-
-                        self.ftool_json_config(activation_key_entry.get(), in_game_hotkey_entry.get(),
-                                               repeat_times_entry.get(), interval_entry.get())
-
+                        self.save_config_json(file=ftool_json_file, values=(activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(), interval_entry.get()))
                         ftool_activation_key = activation_key_entry.get()
                         ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
                         repeat_times = int(repeat_times_entry.get())
                         interval = float(interval_entry.get())
-
-                        self.set_ftool_short_cut(ftool_activation_key)
-
+                        self.set_short_cut(config="ftool", key=ftool_activation_key)
                         toolbar_window = False
-
                         ftool_config_window.destroy()
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
@@ -438,7 +427,6 @@ class MainWindow(QMainWindow):
                 if ftool_json_file_location.exists():
                     with open(ftool_json_file_location) as js:
                         data = json.load(js)
-
                         activation_key_entry.insert(0, data["activation_key"])
                         in_game_hotkey_entry.insert(0, data["in_game_key"])
                         repeat_times_entry.insert(0, data["repeat_times"])
@@ -446,8 +434,7 @@ class MainWindow(QMainWindow):
             except Exception as e:
                 messagebox.showerror("Error", str(e))
 
-            ftool_config_window.wm_protocol("WM_DELETE_WINDOW",
-                                            lambda: self.destroy_toolbar_windows(ftool_config_window))
+            ftool_config_window.wm_protocol("WM_DELETE_WINDOW", lambda: self.destroy_toolbar_windows(ftool_config_window))
             ftool_config_window.mainloop()
 
     def alt_control_config(self):
@@ -484,6 +471,7 @@ class MainWindow(QMainWindow):
                 global vk_code
                 global alt_control_boolean
                 global toolbar_window
+                global alt_control_json_file
 
                 try:
                     if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
@@ -491,23 +479,15 @@ class MainWindow(QMainWindow):
                     elif main_client_hotkey_entry.get() == alt_client_hotkey_entry.get():
                         messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
                     elif main_client_hotkey_entry.get() == ftool_activation_key:
-                        messagebox.showerror("Error",
-                                             "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
+                        messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
-
-                        self.alt_control_json_config(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get())
-
+                        self.save_config_json(file=alt_control_json_file, values=(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get()))
                         alt_control_activation_key = main_client_hotkey_entry.get()
                         alt_control_ingame_key = vk_code.get(alt_client_hotkey_entry.get())
-
-                        self.set_alt_control_short_cut(alt_control_activation_key)
-
+                        self.set_short_cut(config="altcontrol", key=alt_control_activation_key)
                         alt_control_boolean = True
-
                         toolbar_window = False
-
                         alt_control_config_window.destroy()
-
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
@@ -542,14 +522,12 @@ class MainWindow(QMainWindow):
                 if alt_control_json_file_location.exists():
                     with open(alt_control_json_file_location) as js:
                         data = json.load(js)
-
                         main_client_hotkey_entry.insert(0, data["activation_key"])
                         alt_client_hotkey_entry.insert(0, data["in_game_key"])
             except Exception as e:
                 messagebox.showerror("Error", str(e))
 
-            alt_control_config_window.wm_protocol("WM_DELETE_WINDOW",
-                                                  lambda: self.destroy_toolbar_windows(alt_control_config_window))
+            alt_control_config_window.wm_protocol("WM_DELETE_WINDOW", lambda: self.destroy_toolbar_windows(alt_control_config_window))
             alt_control_config_window.mainloop()
 
     @staticmethod
@@ -558,6 +536,7 @@ class MainWindow(QMainWindow):
         global hwndAlt
 
         if alt_control_boolean and alt_control_ingame_key != "" and alt_control_activation_key != "":
+
             hwndAlt = win32gui.FindWindow(None, "PyFlyff - Alt")
 
             win32api.SendMessage(hwndAlt, win32con.WM_KEYDOWN, alt_control_ingame_key, 0)
@@ -591,24 +570,21 @@ class MainWindow(QMainWindow):
 
             def save():
                 global toolbar_window
+                global user_agent_json_file
 
                 try:
                     if user_agent_entry.get() == "":
                         messagebox.showerror("Error", "Field cannot be empty.")
                     else:
-
-                        self.user_agent_json_config(user_agent_entry.get())
-
+                        self.save_config_json(file=user_agent_json_file, values=(user_agent_entry.get(),))
                         toolbar_window = False
-
                         user_agent_config_window.destroy()
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
             user_agent_label = Label(user_agent_config_window, text="Set your User Agent below:", width=30)
             user_agent_entry = Entry(user_agent_config_window, width=40)
-            restart_label = Label(user_agent_config_window, text="After setting your User Agent, restart the Client.",
-                                  width=50)
+            restart_label = Label(user_agent_config_window, text="After setting your User Agent, restart the Client.", width=50)
 
             user_agent_label.pack(pady=5)
             user_agent_entry.pack(pady=5)
@@ -619,8 +595,7 @@ class MainWindow(QMainWindow):
 
             user_agent_entry.insert(0, user_agent)
 
-            user_agent_config_window.wm_protocol("WM_DELETE_WINDOW",
-                                                 lambda: self.destroy_toolbar_windows(user_agent_config_window))
+            user_agent_config_window.wm_protocol("WM_DELETE_WINDOW", lambda: self.destroy_toolbar_windows(user_agent_config_window))
             user_agent_config_window.mainloop()
 
     @staticmethod
@@ -628,48 +603,28 @@ class MainWindow(QMainWindow):
         threading.Thread(target=function).start()
 
     @staticmethod
-    def ftool_json_config(value1, value2, value3, value4):
+    def save_config_json(**kwargs):
+        global ftool_json_file
+        global alt_control_json_file
+        global user_agent_json_file
+
+        file = kwargs.get("file")
+        values = kwargs.get("values")
+
+        data = ""
 
         try:
-            data = {"activation_key": value1, "in_game_key": value2, "repeat_times": value3,
-                    "interval": value4}
+            if file == ftool_json_file:
+                data = {"activation_key": values[0], "in_game_key": values[1], "repeat_times": values[2], "interval": values[3]}
+            if file == alt_control_json_file:
+                data = {"activation_key": values[0], "in_game_key": values[1]}
+            if file == user_agent_json_file:
+                data = {"user_agent": values[0]}
 
             json_data = json.dumps(data)
-
-            save_json = open(ftool_json_file, "w")
+            save_json = open(file, "w")
             save_json.write(str(json_data))
             save_json.close()
-
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
-
-    @staticmethod
-    def alt_control_json_config(value1, value2):
-
-        try:
-            data = {"activation_key": value1, "in_game_key": value2}
-
-            json_data = json.dumps(data)
-
-            save_json = open(alt_control_json_file, "w")
-            save_json.write(str(json_data))
-            save_json.close()
-
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
-
-    @staticmethod
-    def user_agent_json_config(value):
-
-        try:
-            data = {"user_agent": value}
-
-            json_data = json.dumps(data)
-
-            save_json = open(user_agent_json_file, "w")
-            save_json.write(str(json_data))
-            save_json.close()
-
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
@@ -680,8 +635,7 @@ class MainWindow(QMainWindow):
         toolbar_window = False
         window.destroy()
 
-    @staticmethod
-    def clear_hotkeys():
+    def reset_hotkeys(self):
         global hwndMain
         global hwndAlt
         global alt_control_activation_key
@@ -696,6 +650,9 @@ class MainWindow(QMainWindow):
         ftool_activation_key = ""
         alt_control_ingame_key = ""
         ftool_in_game_key = ""
+
+        self.set_ftool_short_cut("")
+        self.set_alt_control_short_cut("")
 
 
 app = QApplication(sys.argv)
