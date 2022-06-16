@@ -31,7 +31,7 @@ I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
 
 # Known Issues so far
 
-If when you try to login wih your Google Account, and Google mark my Client as unsafe, set your User Agent by pressing the button "Set User Agent" in the toolbar and type in input box: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail
+If when you try to login wih your Google Account, and Google mark my Client as unsafe, set your User Agent by pressing the button "Set User Agent" in the toolbar and type in the input box: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail
 
 Hit save and restart the Client, it should let you login with no problem now.
 
