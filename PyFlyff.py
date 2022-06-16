@@ -20,7 +20,7 @@ import win32con
 import win32api
 
 url = "https://universe.flyff.com/play"
-icon = "icons/flyffu.ico"
+icon = "icons/PyFlyff.ico"
 
 ftool_activation_key = ""
 ftool_in_game_key = ""
@@ -365,8 +365,8 @@ class MainWindow(QMainWindow):
             ftool_config_window.geometry("250x200+" + str(int(x)) + "+" + str(int(y)))
             ftool_config_window.resizable(False, False)
             ftool_config_window.attributes("-topmost", True)
-            ftool_config_window.title("Config")
-            ftool_config_window.iconbitmap("icons/flyffu.ico")
+            ftool_config_window.title("Mini Ftool")
+            ftool_config_window.iconbitmap(icon)
 
             def save():
                 global ftool_activation_key
@@ -485,8 +485,8 @@ class MainWindow(QMainWindow):
             alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
             alt_control_config_window.resizable(False, False)
             alt_control_config_window.attributes("-topmost", True)
-            alt_control_config_window.title("Config")
-            alt_control_config_window.iconbitmap("icons/flyffu.ico")
+            alt_control_config_window.title("Alt Control")
+            alt_control_config_window.iconbitmap(icon)
 
             def start():
                 global alt_control_activation_key
@@ -598,7 +598,7 @@ class MainWindow(QMainWindow):
             user_agent_config_window.resizable(False, False)
             user_agent_config_window.attributes("-topmost", True)
             user_agent_config_window.title("User Agent")
-            user_agent_config_window.iconbitmap("icons/flyffu.ico")
+            user_agent_config_window.iconbitmap(icon)
 
             def save():
                 global toolbar_window
