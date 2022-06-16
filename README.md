@@ -29,6 +29,14 @@ And no, I won't make a fully functional Ftool in my client, this takes time to m
 
 I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
 
+# Known Issues so far
+
+If when you try to login wih your Google Account, and Google mark my Client as unsafe, set your User Agent by pressing the button "Set User Agent" in the toolbar and type in input box: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail
+
+Hit save and restart the Client, it should let you login with no problem now.
+
+The reason its seems to happen is because Google is now randomly blocking some emails from login from unknown browsers, but since you are setting this User Agent, Google will think that you are using Firefox.
+
 # How to compile it yourself
 
 You i'll need to pip install those modules to your Python installation:
