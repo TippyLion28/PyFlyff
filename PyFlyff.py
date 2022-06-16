@@ -4,10 +4,9 @@ import sys
 import time
 
 from PyQt5.QtCore import QUrl
-from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QToolBar, QAction
+from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QAction
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QKeySequence, QIcon
 
 from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT
 from tkinter import messagebox
@@ -29,6 +28,7 @@ ftool_in_game_key = ""
 alt_control_activation_key = ""
 alt_control_ingame_key = ""
 
+window_name = ""
 hwndMain = ""
 hwndAlt = ""
 user_agent = ""
@@ -210,30 +210,33 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(icon))
         self.showMaximized()
 
-        toolbar = QToolBar()
-        self.addToolBar(toolbar)
-
         ftool = QAction("Mini FTool", self)
         ftool.triggered.connect(lambda: self.multithreading(self.ftool_config))
-        toolbar.addAction(ftool)
 
         alt_control = QAction("Alt Control", self)
         alt_control.triggered.connect(lambda: self.multithreading(self.alt_control_config))
-        toolbar.addAction(alt_control)
 
         clear_keys = QAction("Reset Hotkeys", self)
         clear_keys.triggered.connect(self.reset_hotkeys)
-        toolbar.addAction(clear_keys)
 
         ua = QAction("Set User Agent", self)
         ua.triggered.connect(lambda: self.multithreading(self.set_user_agent))
-        toolbar.addAction(ua)
+
+        menuBar = self.menuBar()
+
+        tools = menuBar.addMenu("Tools")
+        tools.addAction(ftool)
+        tools.addAction(alt_control)
+        tools.addAction(clear_keys)
+
+        others = menuBar.addMenu("Others")
+        others.addAction(ua)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
         self.reload_client.activated.connect(lambda: self.browser.setUrl(QUrl(url)))
 
         self.change_fullscreen = QShortcut(QKeySequence("Ctrl+Shift+F11"), self)
-        self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow, toolbar))
+        self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow, menuBar))
 
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
         self.new_client.activated.connect(self.create_new_window)
@@ -279,12 +282,10 @@ class MainWindow(QMainWindow):
     def fullscreen(self, w, bar):
         if w.isFullScreen(self):
             w.showMaximized(self)
-            bar.toggleViewAction().setChecked(False)
-            bar.toggleViewAction().trigger()
+            bar.setVisible(True)
         else:
             w.showFullScreen(self)
-            bar.toggleViewAction().setChecked(True)
-            bar.toggleViewAction().trigger()
+            bar.setVisible(False)
 
     def set_short_cut(self, **kwargs):
 
@@ -306,6 +307,7 @@ class MainWindow(QMainWindow):
 
         try:
             while True:
+
                 if counter < repeat_times and start_ftool_loop is True:
                     win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, ftool_in_game_key, 0)
                     time.sleep(0.5)
@@ -316,6 +318,7 @@ class MainWindow(QMainWindow):
                 else:
                     start_ftool_loop = False
                     break
+
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
@@ -328,8 +331,9 @@ class MainWindow(QMainWindow):
     def start_ftool(self):
         global start_ftool_loop
         global hwndMain
+        global window_name
 
-        hwndMain = win32gui.FindWindow(None, "PyFlyff - Main")
+        hwndMain = win32gui.FindWindow(None, "PyFlyff - " + window_name)
 
         if not start_ftool_loop and ftool_activation_key != "" and ftool_in_game_key != "":
             start_ftool_loop = True
@@ -350,7 +354,7 @@ class MainWindow(QMainWindow):
             ftool_config_window = Tk()
 
             window_width = 250
-            window_height = 140
+            window_height = 200
 
             screen_width = ftool_config_window.winfo_screenwidth()
             screen_height = ftool_config_window.winfo_screenheight()
@@ -358,7 +362,7 @@ class MainWindow(QMainWindow):
             x = (screen_width / 2) - (window_width / 2)
             y = (screen_height / 2) - (window_height / 2)
 
-            ftool_config_window.geometry("250x170+" + str(int(x)) + "+" + str(int(y)))
+            ftool_config_window.geometry("250x200+" + str(int(x)) + "+" + str(int(y)))
             ftool_config_window.resizable(False, False)
             ftool_config_window.attributes("-topmost", True)
             ftool_config_window.title("Config")
@@ -370,26 +374,32 @@ class MainWindow(QMainWindow):
                 global alt_control_activation_key
                 global repeat_times
                 global interval
+                global window_name
                 global vk_code
                 global toolbar_window
                 global ftool_json_file
 
                 try:
-                    if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get()) == "":
+                    if (activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get() and window_entry.get()) == "":
                         messagebox.showerror("Error", "Fields cannot be empty.")
                     elif activation_key_entry.get() == in_game_hotkey_entry.get():
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
                     elif activation_key_entry.get() == alt_control_activation_key:
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
-                        self.save_config_json(file=ftool_json_file, values=(activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(), interval_entry.get()))
+                        self.save_config_json(file=ftool_json_file, values=(activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),interval_entry.get(), window_entry.get()))
+
                         ftool_activation_key = activation_key_entry.get()
                         ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
                         repeat_times = int(repeat_times_entry.get())
                         interval = float(interval_entry.get())
+                        window_name = window_entry.get()
+
                         self.set_short_cut(config="ftool", key=ftool_activation_key)
+
                         toolbar_window = False
                         ftool_config_window.destroy()
+
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
@@ -409,6 +419,9 @@ class MainWindow(QMainWindow):
             interval_label = Label(frame, text="Interval:", width=15, anchor=W)
             interval_entry = Entry(frame, width=20)
 
+            window_label = Label(frame, text="Window:", width=15, anchor=W)
+            window_entry = Entry(frame, width=20)
+
             activation_key_label.grid(row=0, column=0, pady=5)
             activation_key_entry.grid(row=0, column=1, pady=5)
 
@@ -421,19 +434,29 @@ class MainWindow(QMainWindow):
             interval_label.grid(row=3, column=0, pady=5)
             interval_entry.grid(row=3, column=1, pady=5)
 
+            window_label.grid(row=4, column=0, pady=5)
+            window_entry.grid(row=4, column=1, pady=5)
+
             button_save = Button(text="Save", width=10, height=1, command=save)
             button_save.pack()
 
             try:
                 if ftool_json_file_location.exists():
                     with open(ftool_json_file_location) as js:
+
                         data = json.load(js)
+
                         activation_key_entry.insert(0, data["activation_key"])
                         in_game_hotkey_entry.insert(0, data["in_game_key"])
                         repeat_times_entry.insert(0, data["repeat_times"])
                         interval_entry.insert(0, data["interval"])
+                        window_entry.insert(0, data["window"])
+
             except Exception as e:
                 messagebox.showerror("Error", str(e))
+
+            if window_entry.get() == "":
+                window_entry.insert(0, "Main")
 
             ftool_config_window.wm_protocol("WM_DELETE_WINDOW", lambda: self.destroy_toolbar_windows(ftool_config_window))
             ftool_config_window.mainloop()
@@ -482,13 +505,19 @@ class MainWindow(QMainWindow):
                     elif main_client_hotkey_entry.get() == ftool_activation_key:
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
+
                         self.save_config_json(file=alt_control_json_file, values=(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get()))
+
                         alt_control_activation_key = main_client_hotkey_entry.get()
                         alt_control_ingame_key = vk_code.get(alt_client_hotkey_entry.get())
+
                         self.set_short_cut(config="altcontrol", key=alt_control_activation_key)
+
                         alt_control_boolean = True
                         toolbar_window = False
+
                         alt_control_config_window.destroy()
+
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
@@ -522,9 +551,12 @@ class MainWindow(QMainWindow):
             try:
                 if alt_control_json_file_location.exists():
                     with open(alt_control_json_file_location) as js:
+
                         data = json.load(js)
+
                         main_client_hotkey_entry.insert(0, data["activation_key"])
                         alt_client_hotkey_entry.insert(0, data["in_game_key"])
+
             except Exception as e:
                 messagebox.showerror("Error", str(e))
 
@@ -537,7 +569,6 @@ class MainWindow(QMainWindow):
         global hwndAlt
 
         if alt_control_boolean and alt_control_ingame_key != "" and alt_control_activation_key != "":
-
             hwndAlt = win32gui.FindWindow(None, "PyFlyff - Alt")
 
             win32api.SendMessage(hwndAlt, win32con.WM_KEYDOWN, alt_control_ingame_key, 0)
@@ -577,9 +608,12 @@ class MainWindow(QMainWindow):
                     if user_agent_entry.get() == "":
                         messagebox.showerror("Error", "Field cannot be empty.")
                     else:
+
                         self.save_config_json(file=user_agent_json_file, values=(user_agent_entry.get(),))
+
                         toolbar_window = False
                         user_agent_config_window.destroy()
+
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
@@ -616,7 +650,7 @@ class MainWindow(QMainWindow):
 
         try:
             if file == ftool_json_file:
-                data = {"activation_key": values[0], "in_game_key": values[1], "repeat_times": values[2], "interval": values[3]}
+                data = {"activation_key": values[0], "in_game_key": values[1], "repeat_times": values[2], "interval": values[3], "window": values[4]}
             if file == alt_control_json_file:
                 data = {"activation_key": values[0], "in_game_key": values[1]}
             if file == user_agent_json_file:
@@ -626,6 +660,7 @@ class MainWindow(QMainWindow):
             save_json = open(file, "w")
             save_json.write(str(json_data))
             save_json.close()
+
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
@@ -637,6 +672,7 @@ class MainWindow(QMainWindow):
         window.destroy()
 
     def reset_hotkeys(self):
+        global window_name
         global hwndMain
         global hwndAlt
         global alt_control_activation_key
@@ -644,6 +680,7 @@ class MainWindow(QMainWindow):
         global alt_control_ingame_key
         global ftool_in_game_key
 
+        window_name = ""
         hwndMain = ""
         hwndAlt = ""
 
