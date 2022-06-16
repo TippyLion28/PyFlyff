@@ -29,6 +29,33 @@ And no, I won't make a fully functional Ftool in my client, this takes time to m
 
 I'll continue to implement stuff and fixing bugs, but for now, enjoy yourself.
 
+# How to compile it yourself
+
+You i'll need to pip install those modules to your Python installation:
+
+pip install pyinstaller
+pip install pywin32
+pip install PyQt5
+pip install PyQtWebEngine
+
+Then create a .BAT file with this:
+
+IF your Python installation is ACCESSIBLE from Windows Env variables:
+
+pyinstaller PyFlyff --icon=icons/flyffu.ico --onedir --noconsole
+pause
+
+IF your Python installation is NOT accessible from Windows Env variables, then you will have to fully tell both python.exe and pyinstaller script locations in the command line:
+
+Path/to/your/python.exe path/to/your/pyinstaller.py PyFlyff.py --icon=icons/flyffu.ico --onedir --noconsole
+pause
+
+pyinstaller.py script is located in your Python installation folder - Scripts
+
+Save both .BAT and put it inside the project folder and run it, wait for the compilation to finish and the resulted folder named "PyFlyff" will apear inside the dist folder created by pyinstaller inside the project folder.
+
+After the compilation is finished, copy the icons folder inside the project folder to the created PyFlyff folder by pyinstaller inside the dist folder, else there will be bugs since tkinter is using the icon as well.
+
 # Android Client
 
 I also made an Android Client that makes it easier for your to Dual Client using your Android Device.
