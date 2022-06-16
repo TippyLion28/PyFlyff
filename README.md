@@ -35,7 +35,7 @@ If when you try to login wih your Google Account, and Google mark my Client as u
 
 Hit save and restart the Client, it should let you login with no problem now.
 
-The reason its seems to happen is because Google is now randomly blocking some emails from login from unknown browsers, but since you are setting this User Agent, Google will think that you are using Firefox.
+The reason for this to happen seems to be Google randomly blocking some e-mails from login on unknown browsers, but since you are setting this User Agent, Google will think that you are using Firefox.
 
 # How to compile it yourself
 
