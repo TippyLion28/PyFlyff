@@ -19,7 +19,7 @@ Alt Control: You can set a hotkey on the Main Client to send a direct command to
 
 Reset Hotkeys: Clear the variables values from Mini Ftool and Alt Control keys as well as the variable containing the value that is used to identify which window is the Main Client and which window is the Alt Client. Good in case you want to switch keys on both Mini Ftool and Alt Control without the need of completly restarting the PyFlyff Client.
 
-User Agent: This is optional. User Agent is the software that is being used during the interaction of any web content, you can leave it alone and it will use the default User Agent, or, you can set any User Agent to spoof yourself. I added it just in case.
+User Agent: You can use this to spoof from where you are playing Flyff Universe, or, you can use it in case you are having trouble from login your Google Account (see the "Known Issues so far" section of this README)
 
 # Disclaimer
 
