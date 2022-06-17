@@ -13,7 +13,7 @@ To stop the Mini Ftool loop, press the same key you set to start it.
 
 # Features
 
-Mini Ftool: You can setup an auto hotkey to automatically use a skill/item for you (good for heal spam or mage/psy/elementor 1x1)
+Mini Ftool: You can setup an auto hotkey to automatically use a skill/item for you (good for heal spam or mage/psy/elementor 1x1) to stop it, press the same key you used to start it.
 
 Alt Control: You can set a hotkey on the Main Client to send a direct command to the Alt Client. Good if you don't want to use the Mini Ftool, but still want to command your FS/RM to heal you without having to alt+tab.
 
