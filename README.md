@@ -55,7 +55,7 @@ Path/to/your/python.exe path/to/your/pyinstaller.py PyFlyff.py --icon=icons/PyFl
 
 pyinstaller.py script is located in your Python installation folder - Scripts
 
-Save both .BAT and put it inside the project folder and run it, wait for the compilation to finish and the resulted folder named "PyFlyff" will apear inside the dist folder created by pyinstaller inside the project folder.
+Save both .BAT and put it inside the project folder and run it, wait for the compilation to finish and the resulted folder named "PyFlyff" will appear inside the dist folder created by pyinstaller inside the project folder.
 
 After the compilation is finished, copy the icons folder inside the project folder to the created PyFlyff folder by pyinstaller inside the dist folder, else there will be bugs since tkinter is using the icon as well.
 
