@@ -41,10 +41,7 @@ The reason for this to happen seems to be Google randomly blocking some e-mails 
 
 You i'll need to pip install those modules to your Python installation:
 
-pip install pyinstaller
-pip install pywin32
-pip install PyQt5
-pip install PyQtWebEngine
+pip install pyinstaller pywin32 PyQt5 PyQtWebEngine
 
 Then create a .BAT file with this:
 
