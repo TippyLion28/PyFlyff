@@ -22,6 +22,8 @@ import win32api
 url = "https://universe.flyff.com/play"
 icon = "icons/PyFlyff.ico"
 
+default_user_agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36"
+
 ftool_activation_key = ""
 ftool_in_game_key = ""
 
@@ -222,6 +224,26 @@ class MainWindow(QMainWindow):
         ua = QAction("Set User Agent", self)
         ua.triggered.connect(lambda: self.multithreading(self.set_user_agent))
 
+        flyffipedia = QAction("Flyffipedia", self)
+        flyffipedia.triggered.connect(lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
+
+        madrigalinside = QAction("Madrigal Inside", self)
+        madrigalinside.triggered.connect(
+            lambda: self.create_new_window("https://madrigalinside.com/", "Madrigal Inside"))
+
+        flyffulator = QAction("Flyffulator", self)
+        flyffulator.triggered.connect(lambda: self.create_new_window("https://flyffulator.com/", "Flyffulator"))
+
+        madrigalmaps = QAction("Madrigal Maps", self)
+        madrigalmaps.triggered.connect(lambda: self.create_new_window("https://www.madrigalmaps.com/", "Madrigal Maps"))
+
+        flyffmodelviewer = QAction("Flyff Model Viewer", self)
+        flyffmodelviewer.triggered.connect(
+            lambda: self.create_new_window("https://flyffmodelviewer.com/", "Flyff Model Viewer"))
+
+        skillulator = QAction("Skillulator", self)
+        skillulator.triggered.connect(lambda: self.create_new_window("https://skillulator.com/", "Skillulator"))
+
         menuBar = self.menuBar()
 
         tools = menuBar.addMenu("Tools")
@@ -229,8 +251,16 @@ class MainWindow(QMainWindow):
         tools.addAction(alt_control)
         tools.addAction(clear_keys)
 
-        others = menuBar.addMenu("Others")
+        others = menuBar.addMenu("Client Settings")
         others.addAction(ua)
+
+        community = menuBar.addMenu("Community")
+        community.addAction(flyffipedia)
+        community.addAction(madrigalmaps)
+        community.addAction(flyffulator)
+        community.addAction(madrigalmaps)
+        community.addAction(flyffmodelviewer)
+        community.addAction(skillulator)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
         self.reload_client.activated.connect(lambda: self.browser.setUrl(QUrl(url)))
@@ -239,7 +269,7 @@ class MainWindow(QMainWindow):
         self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow, menuBar))
 
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
-        self.new_client.activated.connect(self.create_new_window)
+        self.new_client.activated.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
 
         self.ftool_key = QShortcut(self)
         self.ftool_key.activated.connect(self.start_ftool)
@@ -258,21 +288,19 @@ class MainWindow(QMainWindow):
             messagebox.showerror("Error", str(e))
 
         if user_agent == "":
-            self.browser.page().profile().setHttpUserAgent(
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+            self.browser.page().profile().setHttpUserAgent(default_user_agent)
         else:
             self.browser.page().profile().setHttpUserAgent(user_agent)
 
-    def create_new_window(self):
+    def create_new_window(self, link, wn):
         self.new_window = QWebEngineView()
-        self.new_window.load(QUrl(url))
-        self.new_window.setWindowTitle("PyFlyff - Alt")
+        self.new_window.load(QUrl(link))
+        self.new_window.setWindowTitle(wn)
         self.new_window.setWindowIcon(QIcon(icon))
         self.new_window.showMaximized()
 
         if user_agent == "":
-            self.new_window.page().profile().setHttpUserAgent(
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36")
+            self.new_window.page().profile().setHttpUserAgent(default_user_agent)
         else:
             self.new_window.page().profile().setHttpUserAgent(user_agent)
 
@@ -386,8 +414,8 @@ class MainWindow(QMainWindow):
                                              "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
                     else:
                         self.save_config_json(file=ftool_json_file, values=(
-                        activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
-                        interval_entry.get(), window_entry.get()))
+                            activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
+                            interval_entry.get(), window_entry.get()))
 
                         ftool_activation_key = activation_key_entry.get()
                         ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
