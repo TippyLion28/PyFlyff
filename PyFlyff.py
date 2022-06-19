@@ -336,11 +336,13 @@ class MainWindow(QMainWindow):
             while True:
 
                 if counter < repeat_times and start_ftool_loop is True:
+
                     win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, ftool_in_game_key, 0)
-                    time.sleep(0.5)
+                    time.sleep(random.uniform(0.369420, 0.769420))
                     win32api.SendMessage(hwndMain, win32con.WM_KEYUP, ftool_in_game_key, 0)
-                    random_interval = random.uniform(0, interval + 1)
-                    time.sleep(random_interval)
+
+                    time.sleep(random.uniform(0, interval + 1))
+
                     counter += 1
                 else:
                     start_ftool_loop = False
