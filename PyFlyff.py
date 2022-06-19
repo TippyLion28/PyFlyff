@@ -389,7 +389,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             ftool_config_window.geometry("250x200+" + str(int(x)) + "+" + str(int(y)))
-            ftool_config_window.resizable(False, False)
+            ftool_config_window.minsize(250, 200)
             ftool_config_window.attributes("-topmost", True)
             ftool_config_window.title("Mini Ftool")
             ftool_config_window.iconbitmap(icon)
@@ -513,7 +513,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
-            alt_control_config_window.resizable(False, False)
+            alt_control_config_window.minsize(250, 120)
             alt_control_config_window.attributes("-topmost", True)
             alt_control_config_window.title("Alt Control")
             alt_control_config_window.iconbitmap(icon)
@@ -627,7 +627,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             user_agent_config_window.geometry("300x130+" + str(int(x)) + "+" + str(int(y)))
-            user_agent_config_window.resizable(False, False)
+            user_agent_config_window.minsize(300, 130)
             user_agent_config_window.attributes("-topmost", True)
             user_agent_config_window.title("User Agent")
             user_agent_config_window.iconbitmap(icon)
@@ -714,18 +714,20 @@ class MainWindow(QMainWindow):
         global ftool_activation_key
         global alt_control_ingame_key
         global ftool_in_game_key
+        global start_ftool_loop
 
-        window_name = ""
-        hwndMain = ""
-        hwndAlt = ""
+        if not start_ftool_loop:
+            window_name = ""
+            hwndMain = ""
+            hwndAlt = ""
 
-        alt_control_activation_key = ""
-        ftool_activation_key = ""
-        alt_control_ingame_key = ""
-        ftool_in_game_key = ""
+            alt_control_activation_key = ""
+            ftool_activation_key = ""
+            alt_control_ingame_key = ""
+            ftool_in_game_key = ""
 
-        self.ftool_key.setKey("")
-        self.alt_control_key.setKey("")
+            self.ftool_key.setKey("")
+            self.alt_control_key.setKey("")
 
 
 app = QApplication(sys.argv)
