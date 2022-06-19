@@ -21,6 +21,8 @@ Reset Hotkeys: Clear the variables values from Mini Ftool and Alt Control keys a
 
 User Agent: You can use this to spoof from where you are playing Flyff Universe, or, you can use it in case you are having trouble with your Google Account login (see the "Known Issues so far" section of this README)
 
+Community: You can access community links within the client, like Flyffipedia, Madrigal Inside, Flyffulator, Madrigal Maps, Flyff Model Viewer, Skillulator
+
 # Disclaimer
 
 As you can see, I added bot like features to my Client. They are simple, yet, very convenient tools to make the grind a bit more bearable, but keep in mind that using automation is against the rules and you might get banned for it. The Mini Ftool generate a random wait time for every repeatable action, but this does not prevent from a GM to identify that you are in fact botting, so try to not abuse it, you have been very much warned.
