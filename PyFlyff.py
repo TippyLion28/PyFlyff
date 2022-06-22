@@ -5,7 +5,7 @@ import time
 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QAction
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtGui import QKeySequence, QIcon
 
 from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT
@@ -22,7 +22,7 @@ import win32api
 url = "https://universe.flyff.com/play"
 icon = "icons/PyFlyff.ico"
 
-default_user_agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.122 Safari/537.36"
+default_user_agent = "Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail"
 
 ftool_activation_key = ""
 ftool_in_game_key = ""
@@ -206,6 +206,13 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.browser = QWebEngineView()
+
+        main_profile = QWebEngineProfile("MainProfile", self.browser)
+        main_profile.setCachePath("C:/PyFlyff/PyFlyffMain")
+        main_profile.setPersistentStoragePath("C:/PyFlyff/PyFlyffMain")
+        main_page = QWebEnginePage(main_profile, self.browser)
+
+        self.browser.setPage(main_page)
         self.browser.setUrl(QUrl(url))
         self.setCentralWidget(self.browser)
         self.setWindowTitle("PyFlyff - Main")
@@ -294,6 +301,13 @@ class MainWindow(QMainWindow):
 
     def create_new_window(self, link, wn):
         self.new_window = QWebEngineView()
+
+        alt_profile = QWebEngineProfile("AltProfile", self.new_window)
+        alt_profile.setCachePath("C:/PyFlyff/PyFlyffAlt")
+        alt_profile.setPersistentStoragePath("C:/PyFlyff/PyFlyffAlt")
+        alt_page = QWebEnginePage(alt_profile, self.new_window)
+
+        self.new_window.setPage(alt_page)
         self.new_window.load(QUrl(link))
         self.new_window.setWindowTitle(wn)
         self.new_window.setWindowIcon(QIcon(icon))
