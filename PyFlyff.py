@@ -229,7 +229,18 @@ class MainWindow(QMainWindow):
         clear_keys.triggered.connect(self.reset_hotkeys)
 
         ua = QAction("Set User Agent", self)
+        ua.setToolTip(
+            "Change your User Agent to something else if you are having trouble connecting your Google Account/Facebook Account/Apple ID, or connecting to the game as a whole.")
         ua.triggered.connect(lambda: self.multithreading(self.set_user_agent))
+
+        fullscreen = QAction("Fullscreen | Ctrl+Shift+F11", self)
+        fullscreen.triggered.connect(lambda: self.fullscreen(MainWindow, menuBar))
+
+        open_alt_client = QAction("Open Alt Client | Ctrl+Shift+PageUp", self)
+        open_alt_client.triggered.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
+
+        reload_main_client = QAction("Reload Main Client | Ctrl+Shift+F5", self)
+        reload_main_client.triggered.connect(lambda: self.browser.setUrl(QUrl(url)))
 
         flyffipedia = QAction("Flyffipedia", self)
         flyffipedia.triggered.connect(lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
@@ -258,8 +269,12 @@ class MainWindow(QMainWindow):
         tools.addAction(alt_control)
         tools.addAction(clear_keys)
 
-        others = menuBar.addMenu("Client Settings")
+        others = menuBar.addMenu("Client")
         others.addAction(ua)
+        others.addAction(fullscreen)
+        others.addAction(open_alt_client)
+        others.addAction(reload_main_client)
+        others.setToolTipsVisible(True)
 
         community = menuBar.addMenu("Community")
         community.addAction(flyffipedia)
