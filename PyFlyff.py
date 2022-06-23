@@ -464,19 +464,19 @@ class MainWindow(QMainWindow):
 
             frame.pack(fill=X, padx=5, pady=5)
 
-            activation_key_label = Label(frame, text="Activation Key:", width=15, anchor=W)
+            activation_key_label = Label(frame, text="Activation Key:", width=20, anchor=W)
             activation_key_entry = Entry(frame, width=20)
 
-            in_game_hotkey_label = Label(frame, text="In-game Hotkey:", width=15, anchor=W)
+            in_game_hotkey_label = Label(frame, text="In-Game Hotkey:", width=20, anchor=W)
             in_game_hotkey_entry = Entry(frame, width=20)
 
-            repeat_times_label = Label(frame, text="Repeat:", width=15, anchor=W)
+            repeat_times_label = Label(frame, text="Repeat:", width=20, anchor=W)
             repeat_times_entry = Entry(frame, width=20)
 
-            interval_label = Label(frame, text="Interval:", width=15, anchor=W)
+            interval_label = Label(frame, text="Interval:", width=20, anchor=W)
             interval_entry = Entry(frame, width=20)
 
-            window_label = Label(frame, text="Window:", width=15, anchor=W)
+            window_label = Label(frame, text="Window:", width=20, anchor=W)
             window_entry = Entry(frame, width=20)
 
             activation_key_label.grid(row=0, column=0, pady=5)
@@ -590,10 +590,10 @@ class MainWindow(QMainWindow):
             frame.pack(fill=X, padx=5, pady=5)
 
             main_client_hotkey_label = Label(frame, text="Main Client Hotkey:", width=20, anchor=W)
-            main_client_hotkey_entry = Entry(frame, width=10)
+            main_client_hotkey_entry = Entry(frame, width=20)
 
             alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey:", width=20, anchor=W)
-            alt_client_hotkey_entry = Entry(frame, width=10)
+            alt_client_hotkey_entry = Entry(frame, width=20)
 
             main_client_hotkey_label.grid(row=0, column=0, pady=5)
             main_client_hotkey_entry.grid(row=0, column=1, pady=5)
