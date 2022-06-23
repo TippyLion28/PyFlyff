@@ -219,6 +219,8 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(icon))
         self.showMaximized()
 
+        menuBar = self.menuBar()
+
         ftool = QAction("Mini FTool", self)
         ftool.triggered.connect(lambda: self.multithreading(self.ftool_config))
 
@@ -228,61 +230,62 @@ class MainWindow(QMainWindow):
         clear_keys = QAction("Reset Hotkeys", self)
         clear_keys.triggered.connect(self.reset_hotkeys)
 
-        ua = QAction("Set User Agent", self)
-        ua.setToolTip(
-            "Change your User Agent to something else if you are having trouble connecting your Google Account/Facebook Account/Apple ID, or connecting to the game as a whole.")
-        ua.triggered.connect(lambda: self.multithreading(self.set_user_agent))
+        menu_tools = menuBar.addMenu("Tools")
+        menu_tools.addAction(ftool)
+        menu_tools.addAction(alt_control)
+        menu_tools.addAction(clear_keys)
 
-        fullscreen = QAction("Fullscreen | Ctrl+Shift+F11", self)
-        fullscreen.triggered.connect(lambda: self.fullscreen(MainWindow, menuBar))
+        QAction_user_agent = QAction("Set User Agent", self)
+        QAction_user_agent.setToolTip("Change your User Agent to something else if you are having trouble "
+                                      "connecting your Google Account/Facebook Account/Apple ID, "
+                                      "or connecting to the game as a whole.")
 
-        open_alt_client = QAction("Open Alt Client | Ctrl+Shift+PageUp", self)
-        open_alt_client.triggered.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
+        QAction_user_agent.triggered.connect(lambda: self.multithreading(self.set_user_agent))
 
-        reload_main_client = QAction("Reload Main Client | Ctrl+Shift+F5", self)
-        reload_main_client.triggered.connect(lambda: self.browser.setUrl(QUrl(url)))
+        QAction_fullscreen = QAction("Fullscreen | Ctrl+Shift+F11", self)
+        QAction_fullscreen.triggered.connect(lambda: self.fullscreen(MainWindow, menuBar))
 
-        flyffipedia = QAction("Flyffipedia", self)
-        flyffipedia.triggered.connect(lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
+        QAction_open_alt_client = QAction("Open Alt Client | Ctrl+Shift+PageUp", self)
+        QAction_open_alt_client.triggered.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
 
-        madrigalinside = QAction("Madrigal Inside", self)
-        madrigalinside.triggered.connect(
+        QAction_reload_main_client = QAction("Reload Main Client | Ctrl+Shift+F5", self)
+        QAction_reload_main_client.triggered.connect(lambda: self.browser.setUrl(QUrl(url)))
+
+        menu_client = menuBar.addMenu("Client")
+        menu_client.addAction(QAction_user_agent)
+        menu_client.addAction(QAction_fullscreen)
+        menu_client.addAction(QAction_open_alt_client)
+        menu_client.addAction(QAction_reload_main_client)
+        menu_client.setToolTipsVisible(True)
+
+        QAction_flyffipedia = QAction("Flyffipedia", self)
+        QAction_flyffipedia.triggered.connect(lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
+
+        QAction_madrigalinside = QAction("Madrigal Inside", self)
+        QAction_madrigalinside.triggered.connect(
             lambda: self.create_new_window("https://madrigalinside.com/", "Madrigal Inside"))
 
-        flyffulator = QAction("Flyffulator", self)
-        flyffulator.triggered.connect(lambda: self.create_new_window("https://flyffulator.com/", "Flyffulator"))
+        QAction_flyffulator = QAction("Flyffulator", self)
+        QAction_flyffulator.triggered.connect(lambda: self.create_new_window("https://flyffulator.com/", "Flyffulator"))
 
-        madrigalmaps = QAction("Madrigal Maps", self)
-        madrigalmaps.triggered.connect(lambda: self.create_new_window("https://www.madrigalmaps.com/", "Madrigal Maps"))
+        QAction_madrigalmaps = QAction("Madrigal Maps", self)
+        QAction_madrigalmaps.triggered.connect(
+            lambda: self.create_new_window("https://www.madrigalmaps.com/", "Madrigal Maps"))
 
-        flyffmodelviewer = QAction("Flyff Model Viewer", self)
-        flyffmodelviewer.triggered.connect(
+        QAction_flyffmodelviewer = QAction("Flyff Model Viewer", self)
+        QAction_flyffmodelviewer.triggered.connect(
             lambda: self.create_new_window("https://flyffmodelviewer.com/", "Flyff Model Viewer"))
 
-        skillulator = QAction("Skillulator", self)
-        skillulator.triggered.connect(lambda: self.create_new_window("https://skillulator.com/", "Skillulator"))
+        QAction_skillulator = QAction("Skillulator", self)
+        QAction_skillulator.triggered.connect(lambda: self.create_new_window("https://skillulator.com/", "Skillulator"))
 
-        menuBar = self.menuBar()
-
-        tools = menuBar.addMenu("Tools")
-        tools.addAction(ftool)
-        tools.addAction(alt_control)
-        tools.addAction(clear_keys)
-
-        others = menuBar.addMenu("Client")
-        others.addAction(ua)
-        others.addAction(fullscreen)
-        others.addAction(open_alt_client)
-        others.addAction(reload_main_client)
-        others.setToolTipsVisible(True)
-
-        community = menuBar.addMenu("Community")
-        community.addAction(flyffipedia)
-        community.addAction(madrigalmaps)
-        community.addAction(flyffulator)
-        community.addAction(madrigalmaps)
-        community.addAction(flyffmodelviewer)
-        community.addAction(skillulator)
+        menu_community = menuBar.addMenu("Community")
+        menu_community.addAction(QAction_flyffipedia)
+        menu_community.addAction(QAction_madrigalmaps)
+        menu_community.addAction(QAction_flyffulator)
+        menu_community.addAction(QAction_madrigalmaps)
+        menu_community.addAction(QAction_flyffmodelviewer)
+        menu_community.addAction(QAction_skillulator)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
         self.reload_client.activated.connect(lambda: self.browser.setUrl(QUrl(url)))
@@ -301,18 +304,7 @@ class MainWindow(QMainWindow):
 
         self.windows = []
 
-        try:
-            if user_agent_json_file_location.exists():
-                with open(user_agent_json_file_location) as js:
-                    data = json.load(js)
-                    user_agent = data["user_agent"]
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
-
-        if user_agent == "":
-            self.browser.page().profile().setHttpUserAgent(default_user_agent)
-        else:
-            self.browser.page().profile().setHttpUserAgent(user_agent)
+        self.browser.page().profile().setHttpUserAgent(self.load_user_agent())
 
     def create_new_window(self, link, wn):
         self.new_window = QWebEngineView()
@@ -328,10 +320,7 @@ class MainWindow(QMainWindow):
         self.new_window.setWindowIcon(QIcon(icon))
         self.new_window.showMaximized()
 
-        if user_agent == "":
-            self.new_window.page().profile().setHttpUserAgent(default_user_agent)
-        else:
-            self.new_window.page().profile().setHttpUserAgent(user_agent)
+        self.browser.page().profile().setHttpUserAgent(self.load_user_agent())
 
         self.windows.append(self.new_window)
 
@@ -435,15 +424,24 @@ class MainWindow(QMainWindow):
                 global ftool_json_file
 
                 try:
-                    if (
-                            activation_key_entry.get() and in_game_hotkey_entry.get() and repeat_times_entry.get() and interval_entry.get() and window_entry.get()) == "":
+                    if (activation_key_entry.get()
+                        and in_game_hotkey_entry.get()
+                        and repeat_times_entry.get()
+                        and interval_entry.get()
+                        and window_entry.get()) == "":
+
                         messagebox.showerror("Error", "Fields cannot be empty.")
+
                     elif activation_key_entry.get() == in_game_hotkey_entry.get():
+
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
+
                     elif activation_key_entry.get() == alt_control_activation_key:
-                        messagebox.showerror("Error",
-                                             "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
+
+                        messagebox.showerror("Error", "Main Client HotKey from Alt Control "
+                                                      "cannot be the same as the Mini Ftool Activation Key.")
                     else:
+
                         self.save_config_json(file=ftool_json_file, values=(
                             activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
                             interval_entry.get(), window_entry.get()))
@@ -499,19 +497,15 @@ class MainWindow(QMainWindow):
             button_save = Button(text="Save", width=10, height=1, command=save)
             button_save.pack()
 
-            try:
-                if ftool_json_file_location.exists():
-                    with open(ftool_json_file_location) as js:
-                        data = json.load(js)
+            if ftool_json_file_location.exists():
+                with open(ftool_json_file_location) as js:
+                    data = json.load(js)
 
-                        activation_key_entry.insert(0, data["activation_key"])
-                        in_game_hotkey_entry.insert(0, data["in_game_key"])
-                        repeat_times_entry.insert(0, data["repeat_times"])
-                        interval_entry.insert(0, data["interval"])
-                        window_entry.insert(0, data["window"])
-
-            except Exception as e:
-                messagebox.showerror("Error", str(e))
+                    activation_key_entry.insert(0, data["activation_key"])
+                    in_game_hotkey_entry.insert(0, data["in_game_key"])
+                    repeat_times_entry.insert(0, data["repeat_times"])
+                    interval_entry.insert(0, data["interval"])
+                    window_entry.insert(0, data["window"])
 
             if window_entry.get() == "":
                 window_entry.insert(0, "Main")
@@ -521,7 +515,6 @@ class MainWindow(QMainWindow):
             ftool_config_window.mainloop()
 
     def alt_control_config(self):
-
         global alt_control_activation_key
         global alt_control_ingame_key
         global toolbar_window
@@ -558,12 +551,17 @@ class MainWindow(QMainWindow):
 
                 try:
                     if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
+
                         messagebox.showerror("Error", "Fields cannot be empty.")
+
                     elif main_client_hotkey_entry.get() == alt_client_hotkey_entry.get():
+
                         messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
+
                     elif main_client_hotkey_entry.get() == ftool_activation_key:
-                        messagebox.showerror("Error",
-                                             "Main Client HotKey from Alt Control cannot be the same as the Mini Ftool Activation Key.")
+
+                        messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot "
+                                                      "be the same as the Mini Ftool Activation Key.")
                     else:
 
                         self.save_config_json(file=alt_control_json_file,
@@ -609,16 +607,12 @@ class MainWindow(QMainWindow):
             button_stop = Button(text="Stop", width=10, height=1, command=stop)
             button_stop.pack(side=RIGHT, padx=25)
 
-            try:
-                if alt_control_json_file_location.exists():
-                    with open(alt_control_json_file_location) as js:
-                        data = json.load(js)
+            if alt_control_json_file_location.exists():
+                with open(alt_control_json_file_location) as js:
+                    data = json.load(js)
 
-                        main_client_hotkey_entry.insert(0, data["activation_key"])
-                        alt_client_hotkey_entry.insert(0, data["in_game_key"])
-
-            except Exception as e:
-                messagebox.showerror("Error", str(e))
+                    main_client_hotkey_entry.insert(0, data["activation_key"])
+                    alt_client_hotkey_entry.insert(0, data["in_game_key"])
 
             alt_control_config_window.wm_protocol("WM_DELETE_WINDOW",
                                                   lambda: self.destroy_toolbar_windows(alt_control_config_window))
@@ -667,7 +661,9 @@ class MainWindow(QMainWindow):
 
                 try:
                     if user_agent_entry.get() == "":
+
                         messagebox.showerror("Error", "Field cannot be empty.")
+
                     else:
 
                         self.save_config_json(file=user_agent_json_file, values=(user_agent_entry.get(),))
@@ -690,7 +686,10 @@ class MainWindow(QMainWindow):
             button_save = Button(text="Save", width=10, height=1, command=save)
             button_save.pack(pady=5)
 
-            user_agent_entry.insert(0, user_agent)
+            if user_agent == "":
+                user_agent_entry.insert(0, default_user_agent)
+            else:
+                user_agent_entry.insert(0, user_agent)
 
             user_agent_config_window.wm_protocol("WM_DELETE_WINDOW",
                                                  lambda: self.destroy_toolbar_windows(user_agent_config_window))
@@ -715,8 +714,10 @@ class MainWindow(QMainWindow):
             if file == ftool_json_file:
                 data = {"activation_key": values[0], "in_game_key": values[1], "repeat_times": values[2],
                         "interval": values[3], "window": values[4]}
+
             if file == alt_control_json_file:
                 data = {"activation_key": values[0], "in_game_key": values[1]}
+
             if file == user_agent_json_file:
                 data = {"user_agent": values[0]}
 
@@ -757,6 +758,23 @@ class MainWindow(QMainWindow):
 
             self.ftool_key.setKey("")
             self.alt_control_key.setKey("")
+
+    def load_user_agent(self):
+        global user_agent
+        global user_agent_json_file_location
+
+        if user_agent_json_file_location.exists():
+            with open(user_agent_json_file_location) as js:
+                data = json.load(js)
+                user_agent = data["user_agent"]
+
+        if user_agent == "":
+
+            return default_user_agent
+
+        else:
+
+            return user_agent
 
 
 app = QApplication(sys.argv)
