@@ -39,6 +39,8 @@ Hit save and restart the Client, it should let you login with no problem now.
 
 The reason for this to happen seems to be Google randomly blocking some e-mails from login on unknown browsers, but since you are setting this User Agent, Google will think that you are using Firefox.
 
+Sometimes you won't be able to resolve the recaptcha challenge since it will report that PyFlyff is an outdated browser, to fix it, set your User Agent to anything really and it will bypass this check.
+
 # How to compile it yourself
 
 You i'll need to pip install those modules to your Python installation:
