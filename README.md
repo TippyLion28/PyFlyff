@@ -49,7 +49,7 @@ Then create a .BAT file with this:
 
 IF your Python installation is ACCESSIBLE from Windows Env variables:
 
-pyinstaller PyFlyff --icon=icons/PyFlyff.ico --onedir --noconsole
+pyinstaller PyFlyff.py --icon=icons/PyFlyff.ico --onedir --noconsole
 
 IF your Python installation is NOT accessible from Windows Env variables, then you will have to fully tell both python.exe and pyinstaller script locations in the command line:
 
