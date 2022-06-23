@@ -22,7 +22,7 @@ import win32api
 url = "https://universe.flyff.com/play"
 icon = "icons/PyFlyff.ico"
 
-default_user_agent = "Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail"
+default_user_agent = "None"
 
 ftool_activation_key = ""
 ftool_in_game_key = ""
