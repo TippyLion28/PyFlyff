@@ -299,28 +299,7 @@ class MainWindow(QMainWindow):
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
         self.new_client.activated.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
 
-        self.ftool_key = QShortcut(self)
-        self.ftool_key.activated.connect(self.start_ftool)
-
-        self.alt_control_key_1 = QShortcut(self)
-        self.alt_control_key_1.activated.connect(
-            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig1"])))
-
-        self.alt_control_key_2 = QShortcut(self)
-        self.alt_control_key_2.activated.connect(
-            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig2"])))
-
-        self.alt_control_key_3 = QShortcut(self)
-        self.alt_control_key_3.activated.connect(
-            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig3"])))
-
-        self.alt_control_key_4 = QShortcut(self)
-        self.alt_control_key_4.activated.connect(
-            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig4"])))
-
-        self.alt_control_key_5 = QShortcut(self)
-        self.alt_control_key_5.activated.connect(
-            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig5"])))
+        self.create_shortcuts()
 
         self.windows = []
 
@@ -544,7 +523,7 @@ class MainWindow(QMainWindow):
             alt_control_config_window = Tk()
 
             window_width = 250
-            window_height = 200
+            window_height = 220
 
             screen_width = alt_control_config_window.winfo_screenwidth()
             screen_height = alt_control_config_window.winfo_screenheight()
@@ -553,7 +532,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
-            alt_control_config_window.minsize(250, 200)
+            alt_control_config_window.minsize(250, 220)
             alt_control_config_window.attributes("-topmost", True)
             alt_control_config_window.title("Alt Control")
             alt_control_config_window.iconbitmap(icon)
@@ -627,9 +606,11 @@ class MainWindow(QMainWindow):
 
                 alt_control_boolean = False
 
-            explanation_label = Label(alt_control_config_window, text="You can assign multiple keys (up to 5 keys):"
-                                                                      "\n\nMain Client Hotkey(s): q,e,f1,spacebar,shift"
-                                                                      "\n\nAlt Client Hotkey(s): 1,2,3,4,5", anchor=W,
+            explanation_label = Label(alt_control_config_window, text="You can assign multiple keys (up to 10 keys)."
+                                                                      "\nSeparate each key with a comma '','' "
+                                                                      "if more\nthan one. Example:"
+                                                                      "\n\nMain Client Hotkey(s): q,e,f1..."
+                                                                      "\nAlt Client Hotkey(s): 1,2,3...", anchor=W,
                                       justify="left")
             explanation_label.pack(fill=X, padx=5, pady=5)
 
@@ -638,10 +619,10 @@ class MainWindow(QMainWindow):
             frame.pack(fill=X, padx=5, pady=5)
 
             main_client_hotkey_label = Label(frame, text="Main Client Hotkey(s):", width=20, anchor=W)
-            main_client_hotkey_entry = Entry(frame, width=20)
+            main_client_hotkey_entry = Entry(frame, width=15)
 
             alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey(s):", width=20, anchor=W)
-            alt_client_hotkey_entry = Entry(frame, width=20)
+            alt_client_hotkey_entry = Entry(frame, width=15)
 
             main_client_hotkey_label.grid(row=0, column=0, pady=5)
             main_client_hotkey_entry.grid(row=0, column=1, pady=5)
@@ -834,6 +815,50 @@ class MainWindow(QMainWindow):
         self.alt_control_key_3.setKey("")
         self.alt_control_key_4.setKey("")
         self.alt_control_key_5.setKey("")
+
+    def create_shortcuts(self):
+        self.ftool_key = QShortcut(self)
+        self.ftool_key.activated.connect(self.start_ftool)
+
+        self.alt_control_key_1 = QShortcut(self)
+        self.alt_control_key_1.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig1"])))
+
+        self.alt_control_key_2 = QShortcut(self)
+        self.alt_control_key_2.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig2"])))
+
+        self.alt_control_key_3 = QShortcut(self)
+        self.alt_control_key_3.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig3"])))
+
+        self.alt_control_key_4 = QShortcut(self)
+        self.alt_control_key_4.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig4"])))
+
+        self.alt_control_key_5 = QShortcut(self)
+        self.alt_control_key_5.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig5"])))
+
+        self.alt_control_key_6 = QShortcut(self)
+        self.alt_control_key_6.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig6"])))
+
+        self.alt_control_key_7 = QShortcut(self)
+        self.alt_control_key_7.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig7"])))
+
+        self.alt_control_key_8 = QShortcut(self)
+        self.alt_control_key_8.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig8"])))
+
+        self.alt_control_key_9 = QShortcut(self)
+        self.alt_control_key_9.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig9"])))
+
+        self.alt_control_key_10 = QShortcut(self)
+        self.alt_control_key_10.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig10"])))
 
 
 app = QApplication(sys.argv)
