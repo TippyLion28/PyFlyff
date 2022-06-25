@@ -480,7 +480,7 @@ class MainWindow(QMainWindow):
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
-            frame = Frame()
+            frame = Frame(ftool_config_window)
 
             frame.pack(fill=X, padx=5, pady=5)
 
@@ -544,7 +544,7 @@ class MainWindow(QMainWindow):
             alt_control_config_window = Tk()
 
             window_width = 250
-            window_height = 120
+            window_height = 200
 
             screen_width = alt_control_config_window.winfo_screenwidth()
             screen_height = alt_control_config_window.winfo_screenheight()
@@ -553,7 +553,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
-            alt_control_config_window.minsize(250, 120)
+            alt_control_config_window.minsize(250, 200)
             alt_control_config_window.attributes("-topmost", True)
             alt_control_config_window.title("Alt Control")
             alt_control_config_window.iconbitmap(icon)
@@ -627,14 +627,20 @@ class MainWindow(QMainWindow):
 
                 alt_control_boolean = False
 
-            frame = Frame()
+            explanation_label = Label(alt_control_config_window, text="You can assign multiple keys (up to 5 keys):"
+                                                                      "\n\nMain Client Hotkey(s): q,e,f1,spacebar,shift"
+                                                                      "\n\nAlt Client Hotkey(s): 1,2,3,4,5", anchor=W,
+                                      justify="left")
+            explanation_label.pack(fill=X, padx=5, pady=5)
+
+            frame = Frame(alt_control_config_window)
 
             frame.pack(fill=X, padx=5, pady=5)
 
-            main_client_hotkey_label = Label(frame, text="Main Client Hotkey:", width=20, anchor=W)
+            main_client_hotkey_label = Label(frame, text="Main Client Hotkey(s):", width=20, anchor=W)
             main_client_hotkey_entry = Entry(frame, width=20)
 
-            alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey:", width=20, anchor=W)
+            alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey(s):", width=20, anchor=W)
             alt_client_hotkey_entry = Entry(frame, width=20)
 
             main_client_hotkey_label.grid(row=0, column=0, pady=5)
