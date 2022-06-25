@@ -15,13 +15,13 @@ To stop the Mini Ftool loop, press the same key you set to start it.
 
 Mini Ftool: You can setup an auto hotkey to automatically use a skill/item for you (good for heal spam or mage/psy/elementor 1x1) to stop it, press the same key you used to start it.
 
-Alt Control: You can set a hotkey for the Main Client to send a direct command to the Alt Client. Good if you don't want to use the Mini Ftool, but still want to command your FS/RM to heal you without having to alt+tab. To set multiple keys (up to 5 keys) add commas.
+Alt Control: You can set hotkeys for the Main Client to send a direct command to the Alt Client. Good if you don't want to use the Mini Ftool, but still want to command your FS/RM without having to alt+tab. To set multiple keys (up to 10 keys) add commas between each one.
 
 Example:
 
-Main Client Hotkey: q,e,f1,spacebar,shift
+Main Client Hotkey: q,e,f1...
 
-Alt Client Hotkey: 1,2,3,4,5
+Alt Client Hotkey: 1,2,3...
 
 Reset Hotkeys: Clear the variables values from Mini Ftool and Alt Control keys as well as the variable containing the value that is used to identify which window is the Main Client and which window is the Alt Client. Good in case you want to switch keys on both Mini Ftool and Alt Control without the need of completly restarting the PyFlyff Client.
 
