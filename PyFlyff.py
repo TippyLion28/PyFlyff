@@ -623,7 +623,7 @@ class MainWindow(QMainWindow):
             def stop():
                 global alt_control_boolean
 
-                self.clean_shortcut_keys()
+                self.clear_alt_control_shortcut_keys()
 
                 alt_control_boolean = False
 
@@ -796,7 +796,7 @@ class MainWindow(QMainWindow):
 
             self.ftool_key.setKey("")
 
-            self.clean_shortcut_keys()
+            self.clear_alt_control_shortcut_keys()
 
     @staticmethod
     def load_user_agent():
@@ -816,7 +816,7 @@ class MainWindow(QMainWindow):
 
             return user_agent
 
-    def clean_shortcut_keys(self):
+    def clear_alt_control_shortcut_keys(self):
         global key_list_1
         global key_list_2
 
