@@ -815,6 +815,11 @@ class MainWindow(QMainWindow):
         self.alt_control_key_3.setKey("")
         self.alt_control_key_4.setKey("")
         self.alt_control_key_5.setKey("")
+        self.alt_control_key_6.setKey("")
+        self.alt_control_key_7.setKey("")
+        self.alt_control_key_8.setKey("")
+        self.alt_control_key_9.setKey("")
+        self.alt_control_key_10.setKey("")
 
     def create_shortcuts(self):
         self.ftool_key = QShortcut(self)
