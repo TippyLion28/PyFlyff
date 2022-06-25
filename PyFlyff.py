@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QShortcut, QAction
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEnginePage
 from PyQt5.QtGui import QKeySequence, QIcon
 
-from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT
+from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT, END
 from tkinter import messagebox
 
 import random
@@ -27,8 +27,8 @@ default_user_agent = "None"
 ftool_activation_key = ""
 ftool_in_game_key = ""
 
-alt_control_activation_key = ""
-alt_control_ingame_key = ""
+key_list_1 = []
+key_list_2 = []
 
 window_name = ""
 hwndMain = ""
@@ -42,7 +42,7 @@ start_ftool_loop = False
 alt_control_boolean = False
 toolbar_window = False
 
-ftool_json_file = "FToolConfig.json"
+ftool_json_file = "MiniFToolConfig.json"
 ftool_json_file_location = pathlib.Path(ftool_json_file)
 
 alt_control_json_file = "AltControl.json"
@@ -129,30 +129,30 @@ vk_code = {'backspace': 0x08,
            'subtract_key': 0x6D,
            'decimal_key': 0x6E,
            'divide_key': 0x6F,
-           'F1': 0x70,
-           'F2': 0x71,
-           'F3': 0x72,
-           'F4': 0x73,
-           'F5': 0x74,
-           'F6': 0x75,
-           'F7': 0x76,
-           'F8': 0x77,
-           'F9': 0x78,
-           'F10': 0x79,
-           'F11': 0x7A,
-           'F12': 0x7B,
-           'F13': 0x7C,
-           'F14': 0x7D,
-           'F15': 0x7E,
-           'F16': 0x7F,
-           'F17': 0x80,
-           'F18': 0x81,
-           'F19': 0x82,
-           'F20': 0x83,
-           'F21': 0x84,
-           'F22': 0x85,
-           'F23': 0x86,
-           'F24': 0x87,
+           'f1': 0x70,
+           'f2': 0x71,
+           'f3': 0x72,
+           'f4': 0x73,
+           'f5': 0x74,
+           'f6': 0x75,
+           'f7': 0x76,
+           'f8': 0x77,
+           'f9': 0x78,
+           'f10': 0x79,
+           'f11': 0x7A,
+           'f12': 0x7B,
+           'f13': 0x7C,
+           'f14': 0x7D,
+           'f15': 0x7E,
+           'f16': 0x7F,
+           'f17': 0x80,
+           'f18': 0x81,
+           'f19': 0x82,
+           'f20': 0x83,
+           'f21': 0x84,
+           'f22': 0x85,
+           'f23': 0x86,
+           'f24': 0x87,
            'num_lock': 0x90,
            'scroll_lock': 0x91,
            'left_shift': 0xA0,
@@ -219,7 +219,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(icon))
         self.showMaximized()
 
-        menuBar = self.menuBar()
+        menu_bar = self.menuBar()
 
         ftool = QAction("Mini FTool", self)
         ftool.triggered.connect(lambda: self.multithreading(self.ftool_config))
@@ -230,68 +230,71 @@ class MainWindow(QMainWindow):
         clear_keys = QAction("Reset Hotkeys", self)
         clear_keys.triggered.connect(self.reset_hotkeys)
 
-        menu_tools = menuBar.addMenu("Tools")
+        menu_tools = menu_bar.addMenu("Tools")
         menu_tools.addAction(ftool)
         menu_tools.addAction(alt_control)
         menu_tools.addAction(clear_keys)
 
-        QAction_user_agent = QAction("Set User Agent", self)
-        QAction_user_agent.setToolTip("Change your User Agent to something else if you are having trouble "
-                                      "connecting your Google Account/Facebook Account/Apple ID, "
-                                      "or connecting to the game as a whole.")
+        q_action_user_agent = QAction("Set User Agent", self)
+        q_action_user_agent.setToolTip("Change your User Agent to something else if you are having trouble "
+                                       "connecting your Google Account/Facebook Account/Apple ID, "
+                                       "or connecting to the game as a whole.")
 
-        QAction_user_agent.triggered.connect(lambda: self.multithreading(self.set_user_agent))
+        q_action_user_agent.triggered.connect(lambda: self.multithreading(self.set_user_agent))
 
-        QAction_fullscreen = QAction("Fullscreen | Ctrl+Shift+F11", self)
-        QAction_fullscreen.triggered.connect(lambda: self.fullscreen(MainWindow, menuBar))
+        q_action_fullscreen = QAction("Fullscreen | Ctrl+Shift+F11", self)
+        q_action_fullscreen.triggered.connect(lambda: self.fullscreen(MainWindow, menu_bar))
 
-        QAction_open_alt_client = QAction("Open Alt Client | Ctrl+Shift+PageUp", self)
-        QAction_open_alt_client.triggered.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
+        q_action_open_alt_client = QAction("Open Alt Client | Ctrl+Shift+PageUp", self)
+        q_action_open_alt_client.triggered.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
 
-        QAction_reload_main_client = QAction("Reload Main Client | Ctrl+Shift+F5", self)
-        QAction_reload_main_client.triggered.connect(lambda: self.browser.setUrl(QUrl(url)))
+        q_action_reload_main_client = QAction("Reload Main Client | Ctrl+Shift+F5", self)
+        q_action_reload_main_client.triggered.connect(lambda: self.browser.setUrl(QUrl(url)))
 
-        menu_client = menuBar.addMenu("Client")
-        menu_client.addAction(QAction_user_agent)
-        menu_client.addAction(QAction_fullscreen)
-        menu_client.addAction(QAction_open_alt_client)
-        menu_client.addAction(QAction_reload_main_client)
+        menu_client = menu_bar.addMenu("Client")
+        menu_client.addAction(q_action_user_agent)
+        menu_client.addAction(q_action_fullscreen)
+        menu_client.addAction(q_action_open_alt_client)
+        menu_client.addAction(q_action_reload_main_client)
         menu_client.setToolTipsVisible(True)
 
-        QAction_flyffipedia = QAction("Flyffipedia", self)
-        QAction_flyffipedia.triggered.connect(lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
+        q_action_flyffipedia = QAction("Flyffipedia", self)
+        q_action_flyffipedia.triggered.connect(
+            lambda: self.create_new_window("https://flyffipedia.com/", "Flyffipedia"))
 
-        QAction_madrigalinside = QAction("Madrigal Inside", self)
-        QAction_madrigalinside.triggered.connect(
+        q_action_madrigalinside = QAction("Madrigal Inside", self)
+        q_action_madrigalinside.triggered.connect(
             lambda: self.create_new_window("https://madrigalinside.com/", "Madrigal Inside"))
 
-        QAction_flyffulator = QAction("Flyffulator", self)
-        QAction_flyffulator.triggered.connect(lambda: self.create_new_window("https://flyffulator.com/", "Flyffulator"))
+        q_action_flyffulator = QAction("Flyffulator", self)
+        q_action_flyffulator.triggered.connect(
+            lambda: self.create_new_window("https://flyffulator.com/", "Flyffulator"))
 
-        QAction_madrigalmaps = QAction("Madrigal Maps", self)
-        QAction_madrigalmaps.triggered.connect(
+        q_action_madrigalmaps = QAction("Madrigal Maps", self)
+        q_action_madrigalmaps.triggered.connect(
             lambda: self.create_new_window("https://www.madrigalmaps.com/", "Madrigal Maps"))
 
-        QAction_flyffmodelviewer = QAction("Flyff Model Viewer", self)
-        QAction_flyffmodelviewer.triggered.connect(
+        q_action_flyffmodelviewer = QAction("Flyff Model Viewer", self)
+        q_action_flyffmodelviewer.triggered.connect(
             lambda: self.create_new_window("https://flyffmodelviewer.com/", "Flyff Model Viewer"))
 
-        QAction_skillulator = QAction("Skillulator", self)
-        QAction_skillulator.triggered.connect(lambda: self.create_new_window("https://skillulator.com/", "Skillulator"))
+        q_action_skillulator = QAction("Skillulator", self)
+        q_action_skillulator.triggered.connect(
+            lambda: self.create_new_window("https://skillulator.com/", "Skillulator"))
 
-        menu_community = menuBar.addMenu("Community")
-        menu_community.addAction(QAction_flyffipedia)
-        menu_community.addAction(QAction_madrigalmaps)
-        menu_community.addAction(QAction_flyffulator)
-        menu_community.addAction(QAction_madrigalmaps)
-        menu_community.addAction(QAction_flyffmodelviewer)
-        menu_community.addAction(QAction_skillulator)
+        menu_community = menu_bar.addMenu("Community")
+        menu_community.addAction(q_action_flyffipedia)
+        menu_community.addAction(q_action_madrigalmaps)
+        menu_community.addAction(q_action_flyffulator)
+        menu_community.addAction(q_action_madrigalmaps)
+        menu_community.addAction(q_action_flyffmodelviewer)
+        menu_community.addAction(q_action_skillulator)
 
         self.reload_client = QShortcut(QKeySequence("Ctrl+Shift+F5"), self)
         self.reload_client.activated.connect(lambda: self.browser.setUrl(QUrl(url)))
 
         self.change_fullscreen = QShortcut(QKeySequence("Ctrl+Shift+F11"), self)
-        self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow, menuBar))
+        self.change_fullscreen.activated.connect(lambda: self.fullscreen(MainWindow, menu_bar))
 
         self.new_client = QShortcut(QKeySequence("Ctrl+Shift+PgUp"), self)
         self.new_client.activated.connect(lambda: self.create_new_window(url, "PyFlyff - Alt"))
@@ -299,8 +302,25 @@ class MainWindow(QMainWindow):
         self.ftool_key = QShortcut(self)
         self.ftool_key.activated.connect(self.start_ftool)
 
-        self.alt_control_key = QShortcut(self)
-        self.alt_control_key.activated.connect(lambda: self.multithreading(self.send_alt_control_command))
+        self.alt_control_key_1 = QShortcut(self)
+        self.alt_control_key_1.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig1"])))
+
+        self.alt_control_key_2 = QShortcut(self)
+        self.alt_control_key_2.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig2"])))
+
+        self.alt_control_key_3 = QShortcut(self)
+        self.alt_control_key_3.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig3"])))
+
+        self.alt_control_key_4 = QShortcut(self)
+        self.alt_control_key_4.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig4"])))
+
+        self.alt_control_key_5 = QShortcut(self)
+        self.alt_control_key_5.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig5"])))
 
         self.windows = []
 
@@ -331,16 +351,6 @@ class MainWindow(QMainWindow):
         else:
             w.showFullScreen(self)
             bar.setVisible(False)
-
-    def set_short_cut(self, **kwargs):
-
-        config = kwargs.get("config")
-        key = kwargs.get("key")
-
-        if config == "ftool":
-            self.ftool_key.setKey(key)
-        if config == "altcontrol":
-            self.alt_control_key.setKey(key)
 
     @staticmethod
     def ftool_loop():
@@ -415,13 +425,23 @@ class MainWindow(QMainWindow):
             def save():
                 global ftool_activation_key
                 global ftool_in_game_key
-                global alt_control_activation_key
+                global key_list_1
                 global repeat_times
                 global interval
                 global window_name
                 global vk_code
                 global toolbar_window
                 global ftool_json_file
+
+                aux = activation_key_entry.get()
+
+                activation_key_entry.delete(0, END)
+                activation_key_entry.insert(0, aux.replace(" ", "").lower())
+
+                aux = in_game_hotkey_entry.get()
+
+                in_game_hotkey_entry.delete(0, END)
+                in_game_hotkey_entry.insert(0, aux.replace(" ", "").lower())
 
                 try:
                     if (activation_key_entry.get()
@@ -436,7 +456,7 @@ class MainWindow(QMainWindow):
 
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
 
-                    elif activation_key_entry.get() == alt_control_activation_key:
+                    elif activation_key_entry.get() in key_list_1:
 
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control "
                                                       "cannot be the same as the Mini Ftool Activation Key.")
@@ -452,7 +472,7 @@ class MainWindow(QMainWindow):
                         interval = float(interval_entry.get())
                         window_name = window_entry.get()
 
-                        self.set_short_cut(config="ftool", key=ftool_activation_key)
+                        self.ftool_key.setKey(ftool_activation_key)
 
                         toolbar_window = False
                         ftool_config_window.destroy()
@@ -515,8 +535,6 @@ class MainWindow(QMainWindow):
             ftool_config_window.mainloop()
 
     def alt_control_config(self):
-        global alt_control_activation_key
-        global alt_control_ingame_key
         global toolbar_window
 
         if not toolbar_window:
@@ -541,13 +559,26 @@ class MainWindow(QMainWindow):
             alt_control_config_window.iconbitmap(icon)
 
             def start():
-                global alt_control_activation_key
-                global alt_control_ingame_key
                 global ftool_activation_key
                 global vk_code
                 global alt_control_boolean
                 global toolbar_window
                 global alt_control_json_file
+                global key_list_1
+                global key_list_2
+
+                aux = main_client_hotkey_entry.get()
+
+                main_client_hotkey_entry.delete(0, END)
+                main_client_hotkey_entry.insert(0, aux.replace(" ", "").lower())
+
+                aux = alt_client_hotkey_entry.get()
+
+                alt_client_hotkey_entry.delete(0, END)
+                alt_client_hotkey_entry.insert(0, aux.replace(" ", "").lower())
+
+                key_list_1 = main_client_hotkey_entry.get().split(",")
+                key_list_2 = alt_client_hotkey_entry.get().split(",")
 
                 try:
                     if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
@@ -558,7 +589,7 @@ class MainWindow(QMainWindow):
 
                         messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
 
-                    elif main_client_hotkey_entry.get() == ftool_activation_key:
+                    elif ftool_activation_key in key_list_1:
 
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot "
                                                       "be the same as the Mini Ftool Activation Key.")
@@ -567,10 +598,19 @@ class MainWindow(QMainWindow):
                         self.save_config_json(file=alt_control_json_file,
                                               values=(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get()))
 
-                        alt_control_activation_key = main_client_hotkey_entry.get()
-                        alt_control_ingame_key = vk_code.get(alt_client_hotkey_entry.get())
+                        key1_counter = 1
 
-                        self.set_short_cut(config="altcontrol", key=alt_control_activation_key)
+                        for key1 in key_list_1:
+                            globals()["acak" + str(key1_counter)] = key1
+                            exec('self.alt_control_key_' + str(key1_counter) + '.setKey("' + key1 + '")', None,
+                                 locals())
+                            key1_counter += 1
+
+                        key2_counter = 1
+
+                        for key2 in key_list_2:
+                            globals()["acig" + str(key2_counter)] = vk_code.get(key2)
+                            key2_counter += 1
 
                         alt_control_boolean = True
                         toolbar_window = False
@@ -582,6 +622,8 @@ class MainWindow(QMainWindow):
 
             def stop():
                 global alt_control_boolean
+
+                self.clean_shortcut_keys()
 
                 alt_control_boolean = False
 
@@ -619,16 +661,16 @@ class MainWindow(QMainWindow):
             alt_control_config_window.mainloop()
 
     @staticmethod
-    def send_alt_control_command():
+    def send_alt_control_command(igk):
         global alt_control_boolean
         global hwndAlt
 
-        if alt_control_boolean and alt_control_ingame_key != "" and alt_control_activation_key != "":
+        if alt_control_boolean and igk != "":
             hwndAlt = win32gui.FindWindow(None, "PyFlyff - Alt")
 
-            win32api.SendMessage(hwndAlt, win32con.WM_KEYDOWN, alt_control_ingame_key, 0)
+            win32api.SendMessage(hwndAlt, win32con.WM_KEYDOWN, igk, 0)
             time.sleep(0.5)
-            win32api.SendMessage(hwndAlt, win32con.WM_KEYUP, alt_control_ingame_key, 0)
+            win32api.SendMessage(hwndAlt, win32con.WM_KEYUP, igk, 0)
 
     def set_user_agent(self):
         global user_agent
@@ -730,19 +772,17 @@ class MainWindow(QMainWindow):
             messagebox.showerror("Error", str(e))
 
     @staticmethod
-    def destroy_toolbar_windows(window):
+    def destroy_toolbar_windows(w):
         global toolbar_window
 
         toolbar_window = False
-        window.destroy()
+        w.destroy()
 
     def reset_hotkeys(self):
         global window_name
         global hwndMain
         global hwndAlt
-        global alt_control_activation_key
         global ftool_activation_key
-        global alt_control_ingame_key
         global ftool_in_game_key
         global start_ftool_loop
 
@@ -751,15 +791,15 @@ class MainWindow(QMainWindow):
             hwndMain = ""
             hwndAlt = ""
 
-            alt_control_activation_key = ""
             ftool_activation_key = ""
-            alt_control_ingame_key = ""
             ftool_in_game_key = ""
 
             self.ftool_key.setKey("")
-            self.alt_control_key.setKey("")
 
-    def load_user_agent(self):
+            self.clean_shortcut_keys()
+
+    @staticmethod
+    def load_user_agent():
         global user_agent
         global user_agent_json_file_location
 
@@ -775,6 +815,19 @@ class MainWindow(QMainWindow):
         else:
 
             return user_agent
+
+    def clean_shortcut_keys(self):
+        global key_list_1
+        global key_list_2
+
+        key_list_1.clear()
+        key_list_2.clear()
+
+        self.alt_control_key_1.setKey("")
+        self.alt_control_key_2.setKey("")
+        self.alt_control_key_3.setKey("")
+        self.alt_control_key_4.setKey("")
+        self.alt_control_key_5.setKey("")
 
 
 app = QApplication(sys.argv)
