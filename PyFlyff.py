@@ -11,6 +11,8 @@ from PyQt5.QtGui import QKeySequence, QIcon
 from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT, END
 from tkinter import messagebox
 
+import collections
+
 import random
 
 import threading
@@ -546,6 +548,8 @@ class MainWindow(QMainWindow):
                 global key_list_1
                 global key_list_2
 
+                self.clear_alt_control_shortcut_keys()
+
                 aux = main_client_hotkey_entry.get()
 
                 main_client_hotkey_entry.delete(0, END)
@@ -564,9 +568,14 @@ class MainWindow(QMainWindow):
 
                         messagebox.showerror("Error", "Fields cannot be empty.")
 
-                    elif main_client_hotkey_entry.get() == alt_client_hotkey_entry.get():
+                    elif any(e in key_list_1 for e in key_list_2):
 
-                        messagebox.showerror("Error", "Main Client Hotkey and Alt Client Hotkey must be different.")
+                        messagebox.showerror("Error",
+                                             "Main Client Hotkey(s) and Alt Client Hotkey(s) must be different.")
+
+                    elif len(key_list_1) != len(key_list_2):
+                        messagebox.showerror("Error",
+                                             "Number of keys must be equal to both Main Client and Alt Client.")
 
                     elif ftool_activation_key in key_list_1:
 
