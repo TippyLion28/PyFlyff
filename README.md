@@ -9,7 +9,7 @@ Ctrl+Shift+F11 = enter/exit main window fullscreen
 
 Ctrl+Shift+PgUp (PageUp) open a new client window
 
-To stop the Mini Ftool loop, press the same key you set to start it.
+To stop the Mini Ftool loop, press the Activation Key again.
 
 # Features
 
