@@ -24,11 +24,11 @@ icon = "icons/PyFlyff.ico"
 
 default_user_agent = "None"
 
-ftool_activation_key = ""
-ftool_in_game_key = ""
+mini_ftool_activation_key = ""
+mini_ftool_in_game_key = ""
 
-key_list_1 = []
-key_list_2 = []
+alt_control_key_list_1 = []
+alt_control_key_list_2 = []
 
 window_name = ""
 hwndMain = ""
@@ -38,12 +38,12 @@ user_agent = ""
 repeat_times = 0
 interval = 0
 
-start_ftool_loop = False
+start_mini_ftool_loop = False
 alt_control_boolean = False
 toolbar_window = False
 
-ftool_json_file = "MiniFToolConfig.json"
-ftool_json_file_location = pathlib.Path(ftool_json_file)
+mini_ftool_json_file = "MiniFToolConfig.json"
+mini_ftool_json_file_location = pathlib.Path(mini_ftool_json_file)
 
 alt_control_json_file = "AltControl.json"
 alt_control_json_file_location = pathlib.Path(alt_control_json_file)
@@ -333,49 +333,49 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def ftool_loop():
-        global start_ftool_loop
+        global start_mini_ftool_loop
         global hwndMain
-        global ftool_in_game_key
+        global mini_ftool_in_game_key
 
         counter = 0
 
         try:
             while True:
 
-                if counter < repeat_times and start_ftool_loop is True:
+                if counter < repeat_times and start_mini_ftool_loop is True:
 
-                    win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, ftool_in_game_key, 0)
+                    win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, mini_ftool_in_game_key, 0)
                     time.sleep(random.uniform(0.369420, 0.769420))
-                    win32api.SendMessage(hwndMain, win32con.WM_KEYUP, ftool_in_game_key, 0)
+                    win32api.SendMessage(hwndMain, win32con.WM_KEYUP, mini_ftool_in_game_key, 0)
 
                     time.sleep(random.uniform(0, interval + 1))
 
                     counter += 1
                 else:
-                    start_ftool_loop = False
+                    start_mini_ftool_loop = False
                     break
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
     def start_ftool(self):
-        global start_ftool_loop
+        global start_mini_ftool_loop
         global hwndMain
         global window_name
 
         hwndMain = win32gui.FindWindow(None, "PyFlyff - " + window_name)
 
-        if not start_ftool_loop:
-            if ftool_activation_key != "" and ftool_in_game_key != "":
-                start_ftool_loop = True
+        if not start_mini_ftool_loop:
+            if mini_ftool_activation_key != "" and mini_ftool_in_game_key != "":
+                start_mini_ftool_loop = True
                 self.multithreading(self.ftool_loop)
         else:
-            start_ftool_loop = False
+            start_mini_ftool_loop = False
 
     def ftool_config(self):
 
-        global ftool_activation_key
-        global ftool_in_game_key
+        global mini_ftool_activation_key
+        global mini_ftool_in_game_key
         global repeat_times
         global interval
         global toolbar_window
@@ -387,7 +387,7 @@ class MainWindow(QMainWindow):
             ftool_config_window = Tk()
 
             window_width = 250
-            window_height = 220
+            window_height = 250
 
             screen_width = ftool_config_window.winfo_screenwidth()
             screen_height = ftool_config_window.winfo_screenheight()
@@ -395,22 +395,22 @@ class MainWindow(QMainWindow):
             x = (screen_width / 2) - (window_width / 2)
             y = (screen_height / 2) - (window_height / 2)
 
-            ftool_config_window.geometry("250x200+" + str(int(x)) + "+" + str(int(y)))
+            ftool_config_window.geometry("250x250+" + str(int(x)) + "+" + str(int(y)))
             ftool_config_window.minsize(250, 250)
             ftool_config_window.attributes("-topmost", True)
             ftool_config_window.title("Mini Ftool")
             ftool_config_window.iconbitmap(icon)
 
             def save():
-                global ftool_activation_key
-                global ftool_in_game_key
-                global key_list_1
+                global mini_ftool_activation_key
+                global mini_ftool_in_game_key
+                global alt_control_key_list_1
                 global repeat_times
                 global interval
                 global window_name
                 global vk_code
                 global toolbar_window
-                global ftool_json_file
+                global mini_ftool_json_file
 
                 aux = activation_key_entry.get()
 
@@ -435,23 +435,23 @@ class MainWindow(QMainWindow):
 
                         messagebox.showerror("Error", "Activation Key and In-game Hotkey must be different.")
 
-                    elif activation_key_entry.get() in key_list_1:
+                    elif activation_key_entry.get() in alt_control_key_list_1:
 
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control "
                                                       "cannot be the same as the Mini Ftool Activation Key.")
                     else:
 
-                        self.save_config_json(file=ftool_json_file, values=(
+                        self.save_config_json(file=mini_ftool_json_file, values=(
                             activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
                             interval_entry.get(), window_entry.get()))
 
-                        ftool_activation_key = activation_key_entry.get()
-                        ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
+                        mini_ftool_activation_key = activation_key_entry.get()
+                        mini_ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
                         repeat_times = int(repeat_times_entry.get())
                         interval = float(interval_entry.get())
                         window_name = window_entry.get()
 
-                        self.ftool_key.setKey(ftool_activation_key)
+                        self.ftool_key.setKey(mini_ftool_activation_key)
 
                         toolbar_window = False
                         ftool_config_window.destroy()
@@ -500,8 +500,8 @@ class MainWindow(QMainWindow):
             button_save = Button(text="Save", width=10, height=1, command=save)
             button_save.pack()
 
-            if ftool_json_file_location.exists():
-                with open(ftool_json_file_location) as js:
+            if mini_ftool_json_file_location.exists():
+                with open(mini_ftool_json_file_location) as js:
                     data = json.load(js)
 
                     activation_key_entry.insert(0, data["activation_key"])
@@ -526,8 +526,8 @@ class MainWindow(QMainWindow):
 
             alt_control_config_window = Tk()
 
-            window_width = 250
-            window_height = 220
+            window_width = 300
+            window_height = 250
 
             screen_width = alt_control_config_window.winfo_screenwidth()
             screen_height = alt_control_config_window.winfo_screenheight()
@@ -535,20 +535,20 @@ class MainWindow(QMainWindow):
             x = (screen_width / 2) - (window_width / 2)
             y = (screen_height / 2) - (window_height / 2)
 
-            alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
+            alt_control_config_window.geometry("300x250+" + str(int(x)) + "+" + str(int(y)))
             alt_control_config_window.minsize(300, 250)
             alt_control_config_window.attributes("-topmost", True)
             alt_control_config_window.title("Alt Control")
             alt_control_config_window.iconbitmap(icon)
 
             def start():
-                global ftool_activation_key
+                global mini_ftool_activation_key
                 global vk_code
                 global alt_control_boolean
                 global toolbar_window
                 global alt_control_json_file
-                global key_list_1
-                global key_list_2
+                global alt_control_key_list_1
+                global alt_control_key_list_2
 
                 self.clear_alt_control_shortcut_keys()
 
@@ -562,24 +562,24 @@ class MainWindow(QMainWindow):
                 alt_client_hotkey_entry.delete(0, END)
                 alt_client_hotkey_entry.insert(0, aux.replace(" ", "").lower())
 
-                key_list_1 = main_client_hotkey_entry.get().split(",")
-                key_list_2 = alt_client_hotkey_entry.get().split(",")
+                alt_control_key_list_1 = main_client_hotkey_entry.get().split(",")
+                alt_control_key_list_2 = alt_client_hotkey_entry.get().split(",")
 
                 try:
                     if (main_client_hotkey_entry.get() and alt_client_hotkey_entry.get()) == "":
 
                         messagebox.showerror("Error", "Fields cannot be empty.")
 
-                    elif any(e in key_list_1 for e in key_list_2):
+                    elif any(e in alt_control_key_list_1 for e in alt_control_key_list_2):
 
                         messagebox.showerror("Error",
                                              "Main Client Hotkey(s) and Alt Client Hotkey(s) must be different.")
 
-                    elif len(key_list_1) != len(key_list_2):
+                    elif len(alt_control_key_list_1) != len(alt_control_key_list_2):
                         messagebox.showerror("Error",
                                              "Number of keys must be equal to both Main Client and Alt Client.")
 
-                    elif ftool_activation_key in key_list_1:
+                    elif mini_ftool_activation_key in alt_control_key_list_1:
 
                         messagebox.showerror("Error", "Main Client HotKey from Alt Control cannot "
                                                       "be the same as the Mini Ftool Activation Key.")
@@ -590,7 +590,7 @@ class MainWindow(QMainWindow):
 
                         key1_counter = 1
 
-                        for key1 in key_list_1:
+                        for key1 in alt_control_key_list_1:
                             globals()["acak" + str(key1_counter)] = key1
                             exec('self.alt_control_key_' + str(key1_counter) + '.setKey("' + key1 + '")', None,
                                  locals())
@@ -598,7 +598,7 @@ class MainWindow(QMainWindow):
 
                         key2_counter = 1
 
-                        for key2 in key_list_2:
+                        for key2 in alt_control_key_list_2:
                             globals()["acig" + str(key2_counter)] = vk_code.get(key2)
                             key2_counter += 1
 
@@ -743,7 +743,7 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def save_config_json(**kwargs):
-        global ftool_json_file
+        global mini_ftool_json_file
         global alt_control_json_file
         global user_agent_json_file
 
@@ -753,7 +753,7 @@ class MainWindow(QMainWindow):
         data = ""
 
         try:
-            if file == ftool_json_file:
+            if file == mini_ftool_json_file:
                 data = {"activation_key": values[0], "in_game_key": values[1], "repeat_times": values[2],
                         "interval": values[3], "window": values[4]}
 
@@ -782,17 +782,17 @@ class MainWindow(QMainWindow):
         global window_name
         global hwndMain
         global hwndAlt
-        global ftool_activation_key
-        global ftool_in_game_key
-        global start_ftool_loop
+        global mini_ftool_activation_key
+        global mini_ftool_in_game_key
+        global start_mini_ftool_loop
 
-        if not start_ftool_loop:
+        if not start_mini_ftool_loop:
             window_name = ""
             hwndMain = ""
             hwndAlt = ""
 
-            ftool_activation_key = ""
-            ftool_in_game_key = ""
+            mini_ftool_activation_key = ""
+            mini_ftool_in_game_key = ""
 
             self.ftool_key.setKey("")
 
@@ -817,11 +817,11 @@ class MainWindow(QMainWindow):
             return user_agent
 
     def clear_alt_control_shortcut_keys(self):
-        global key_list_1
-        global key_list_2
+        global alt_control_key_list_1
+        global alt_control_key_list_2
 
-        key_list_1.clear()
-        key_list_2.clear()
+        alt_control_key_list_1.clear()
+        alt_control_key_list_2.clear()
 
         self.alt_control_key_1.setKey("")
         self.alt_control_key_2.setKey("")
