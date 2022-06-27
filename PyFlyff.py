@@ -35,12 +35,12 @@ hwndMain = ""
 hwndAlt = ""
 user_agent = ""
 
-repeat_times = 0
-interval = 0
+mini_ftool_repeat_times = 0
+mini_ftool_interval = 0
 
 start_mini_ftool_loop = False
 alt_control_boolean = False
-toolbar_window = False
+menubar_window = False
 
 mini_ftool_json_file = "MiniFToolConfig.json"
 mini_ftool_json_file_location = pathlib.Path(mini_ftool_json_file)
@@ -342,13 +342,13 @@ class MainWindow(QMainWindow):
         try:
             while True:
 
-                if counter < repeat_times and start_mini_ftool_loop is True:
+                if counter < mini_ftool_repeat_times and start_mini_ftool_loop is True:
 
                     win32api.SendMessage(hwndMain, win32con.WM_KEYDOWN, mini_ftool_in_game_key, 0)
                     time.sleep(random.uniform(0.369420, 0.769420))
                     win32api.SendMessage(hwndMain, win32con.WM_KEYUP, mini_ftool_in_game_key, 0)
 
-                    time.sleep(random.uniform(0, interval + 1))
+                    time.sleep(random.uniform(0, mini_ftool_interval + 1))
 
                     counter += 1
                 else:
@@ -376,13 +376,13 @@ class MainWindow(QMainWindow):
 
         global mini_ftool_activation_key
         global mini_ftool_in_game_key
-        global repeat_times
-        global interval
-        global toolbar_window
+        global mini_ftool_repeat_times
+        global mini_ftool_interval
+        global menubar_window
 
-        if not toolbar_window:
+        if not menubar_window:
 
-            toolbar_window = True
+            menubar_window = True
 
             ftool_config_window = Tk()
 
@@ -405,11 +405,11 @@ class MainWindow(QMainWindow):
                 global mini_ftool_activation_key
                 global mini_ftool_in_game_key
                 global alt_control_key_list_1
-                global repeat_times
-                global interval
+                global mini_ftool_repeat_times
+                global mini_ftool_interval
                 global window_name
                 global vk_code
-                global toolbar_window
+                global menubar_window
                 global mini_ftool_json_file
 
                 aux = activation_key_entry.get()
@@ -441,19 +441,19 @@ class MainWindow(QMainWindow):
                                                       "cannot be the same as the Mini Ftool Activation Key.")
                     else:
 
-                        self.save_config_json(file=mini_ftool_json_file, values=(
-                            activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
-                            interval_entry.get(), window_entry.get()))
-
                         mini_ftool_activation_key = activation_key_entry.get()
                         mini_ftool_in_game_key = vk_code.get(in_game_hotkey_entry.get())
-                        repeat_times = int(repeat_times_entry.get())
-                        interval = float(interval_entry.get())
+                        mini_ftool_repeat_times = int(repeat_times_entry.get())
+                        mini_ftool_interval = float(interval_entry.get())
                         window_name = window_entry.get()
 
                         self.ftool_key.setKey(mini_ftool_activation_key)
 
-                        toolbar_window = False
+                        self.save_config_json(file=mini_ftool_json_file, values=(
+                            activation_key_entry.get(), in_game_hotkey_entry.get(), repeat_times_entry.get(),
+                            interval_entry.get(), window_entry.get()))
+
+                        menubar_window = False
                         ftool_config_window.destroy()
 
                 except Exception as e:
@@ -518,11 +518,11 @@ class MainWindow(QMainWindow):
             ftool_config_window.mainloop()
 
     def alt_control_config(self):
-        global toolbar_window
+        global menubar_window
 
-        if not toolbar_window:
+        if not menubar_window:
 
-            toolbar_window = True
+            menubar_window = True
 
             alt_control_config_window = Tk()
 
@@ -545,7 +545,7 @@ class MainWindow(QMainWindow):
                 global mini_ftool_activation_key
                 global vk_code
                 global alt_control_boolean
-                global toolbar_window
+                global menubar_window
                 global alt_control_json_file
                 global alt_control_key_list_1
                 global alt_control_key_list_2
@@ -585,9 +585,6 @@ class MainWindow(QMainWindow):
                                                       "be the same as the Mini Ftool Activation Key.")
                     else:
 
-                        self.save_config_json(file=alt_control_json_file,
-                                              values=(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get()))
-
                         key1_counter = 1
 
                         for key1 in alt_control_key_list_1:
@@ -602,8 +599,11 @@ class MainWindow(QMainWindow):
                             globals()["acig" + str(key2_counter)] = vk_code.get(key2)
                             key2_counter += 1
 
+                        self.save_config_json(file=alt_control_json_file,
+                                              values=(main_client_hotkey_entry.get(), alt_client_hotkey_entry.get()))
+
                         alt_control_boolean = True
-                        toolbar_window = False
+                        menubar_window = False
 
                         alt_control_config_window.destroy()
 
@@ -674,11 +674,11 @@ class MainWindow(QMainWindow):
 
     def set_user_agent(self):
         global user_agent
-        global toolbar_window
+        global menubar_window
 
-        if not toolbar_window:
+        if not menubar_window:
 
-            toolbar_window = True
+            menubar_window = True
 
             user_agent_config_window = Tk()
 
@@ -698,7 +698,7 @@ class MainWindow(QMainWindow):
             user_agent_config_window.iconbitmap(icon)
 
             def save():
-                global toolbar_window
+                global menubar_window
                 global user_agent_json_file
 
                 try:
@@ -710,7 +710,7 @@ class MainWindow(QMainWindow):
 
                         self.save_config_json(file=user_agent_json_file, values=(user_agent_entry.get(),))
 
-                        toolbar_window = False
+                        menubar_window = False
                         user_agent_config_window.destroy()
 
                 except Exception as e:
@@ -773,9 +773,9 @@ class MainWindow(QMainWindow):
 
     @staticmethod
     def destroy_toolbar_windows(w):
-        global toolbar_window
+        global menubar_window
 
-        toolbar_window = False
+        menubar_window = False
         w.destroy()
 
     def reset_hotkeys(self):
