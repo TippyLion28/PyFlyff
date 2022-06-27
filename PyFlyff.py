@@ -11,8 +11,6 @@ from PyQt5.QtGui import QKeySequence, QIcon
 from tkinter import Tk, Frame, Label, Entry, Button, X, W, LEFT, RIGHT, END
 from tkinter import messagebox
 
-import collections
-
 import random
 
 import threading
@@ -389,7 +387,7 @@ class MainWindow(QMainWindow):
             ftool_config_window = Tk()
 
             window_width = 250
-            window_height = 200
+            window_height = 220
 
             screen_width = ftool_config_window.winfo_screenwidth()
             screen_height = ftool_config_window.winfo_screenheight()
@@ -398,7 +396,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             ftool_config_window.geometry("250x200+" + str(int(x)) + "+" + str(int(y)))
-            ftool_config_window.minsize(250, 200)
+            ftool_config_window.minsize(250, 250)
             ftool_config_window.attributes("-topmost", True)
             ftool_config_window.title("Mini Ftool")
             ftool_config_window.iconbitmap(icon)
@@ -461,23 +459,27 @@ class MainWindow(QMainWindow):
                 except Exception as e:
                     messagebox.showerror("Error", str(e))
 
+            explanation_label = Label(ftool_config_window, text="To stop the Mini Ftool, press the activation"
+                                                                "\nkey again.", anchor=W, justify="left")
+            explanation_label.pack(fill=X, padx=5, pady=5)
+
             frame = Frame(ftool_config_window)
 
             frame.pack(fill=X, padx=5, pady=5)
 
-            activation_key_label = Label(frame, text="Activation Key:", width=20, anchor=W)
+            activation_key_label = Label(frame, text="Activation Key:", width=15, anchor=W)
             activation_key_entry = Entry(frame, width=20)
 
-            in_game_hotkey_label = Label(frame, text="In-Game Hotkey:", width=20, anchor=W)
+            in_game_hotkey_label = Label(frame, text="In-Game Hotkey:", width=15, anchor=W)
             in_game_hotkey_entry = Entry(frame, width=20)
 
-            repeat_times_label = Label(frame, text="Repeat:", width=20, anchor=W)
+            repeat_times_label = Label(frame, text="Repeat:", width=15, anchor=W)
             repeat_times_entry = Entry(frame, width=20)
 
-            interval_label = Label(frame, text="Interval:", width=20, anchor=W)
+            interval_label = Label(frame, text="Interval:", width=15, anchor=W)
             interval_entry = Entry(frame, width=20)
 
-            window_label = Label(frame, text="Window:", width=20, anchor=W)
+            window_label = Label(frame, text="Window:", width=15, anchor=W)
             window_entry = Entry(frame, width=20)
 
             activation_key_label.grid(row=0, column=0, pady=5)
@@ -534,7 +536,7 @@ class MainWindow(QMainWindow):
             y = (screen_height / 2) - (window_height / 2)
 
             alt_control_config_window.geometry("250x120+" + str(int(x)) + "+" + str(int(y)))
-            alt_control_config_window.minsize(250, 220)
+            alt_control_config_window.minsize(300, 250)
             alt_control_config_window.attributes("-topmost", True)
             alt_control_config_window.title("Alt Control")
             alt_control_config_window.iconbitmap(icon)
@@ -615,11 +617,13 @@ class MainWindow(QMainWindow):
 
                 alt_control_boolean = False
 
-            explanation_label = Label(alt_control_config_window, text="You can assign multiple keys (up to 10 keys)."
-                                                                      "\nSeparate each key with a comma '','' "
-                                                                      "if more\nthan one. Example:"
-                                                                      "\n\nMain Client Hotkey(s): q,e,f1..."
-                                                                      "\nAlt Client Hotkey(s): 1,2,3...", anchor=W,
+            explanation_label = Label(alt_control_config_window, text="You can assign multiple keys (up to 20 keys)."
+                                                                      "\n\nSeparate each key with a comma '','' "
+                                                                      "if more than one."
+                                                                      "\n\nExample:"
+                                                                      "\n\nMain Client Hotkey(s): q,e,f1,f2,v,x..."
+                                                                      "\nAlt Client Hotkey(s): 1,2,3,spacebar,z,c...",
+                                      anchor=W,
                                       justify="left")
             explanation_label.pack(fill=X, padx=5, pady=5)
 
@@ -628,10 +632,10 @@ class MainWindow(QMainWindow):
             frame.pack(fill=X, padx=5, pady=5)
 
             main_client_hotkey_label = Label(frame, text="Main Client Hotkey(s):", width=20, anchor=W)
-            main_client_hotkey_entry = Entry(frame, width=15)
+            main_client_hotkey_entry = Entry(frame, width=22)
 
             alt_client_hotkey_label = Label(frame, text="Alt Client Hotkey(s):", width=20, anchor=W)
-            alt_client_hotkey_entry = Entry(frame, width=15)
+            alt_client_hotkey_entry = Entry(frame, width=22)
 
             main_client_hotkey_label.grid(row=0, column=0, pady=5)
             main_client_hotkey_entry.grid(row=0, column=1, pady=5)
@@ -829,6 +833,16 @@ class MainWindow(QMainWindow):
         self.alt_control_key_8.setKey("")
         self.alt_control_key_9.setKey("")
         self.alt_control_key_10.setKey("")
+        self.alt_control_key_11.setKey("")
+        self.alt_control_key_12.setKey("")
+        self.alt_control_key_13.setKey("")
+        self.alt_control_key_14.setKey("")
+        self.alt_control_key_15.setKey("")
+        self.alt_control_key_16.setKey("")
+        self.alt_control_key_17.setKey("")
+        self.alt_control_key_18.setKey("")
+        self.alt_control_key_19.setKey("")
+        self.alt_control_key_20.setKey("")
 
     def create_shortcuts(self):
         self.ftool_key = QShortcut(self)
@@ -873,6 +887,46 @@ class MainWindow(QMainWindow):
         self.alt_control_key_10 = QShortcut(self)
         self.alt_control_key_10.activated.connect(
             lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig10"])))
+
+        self.alt_control_key_11 = QShortcut(self)
+        self.alt_control_key_11.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig11"])))
+
+        self.alt_control_key_12 = QShortcut(self)
+        self.alt_control_key_12.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig12"])))
+
+        self.alt_control_key_13 = QShortcut(self)
+        self.alt_control_key_13.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig13"])))
+
+        self.alt_control_key_14 = QShortcut(self)
+        self.alt_control_key_14.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig14"])))
+
+        self.alt_control_key_15 = QShortcut(self)
+        self.alt_control_key_15.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig15"])))
+
+        self.alt_control_key_16 = QShortcut(self)
+        self.alt_control_key_16.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig16"])))
+
+        self.alt_control_key_17 = QShortcut(self)
+        self.alt_control_key_17.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig17"])))
+
+        self.alt_control_key_18 = QShortcut(self)
+        self.alt_control_key_18.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig18"])))
+
+        self.alt_control_key_19 = QShortcut(self)
+        self.alt_control_key_19.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig19"])))
+
+        self.alt_control_key_20 = QShortcut(self)
+        self.alt_control_key_20.activated.connect(
+            lambda: self.multithreading(lambda: self.send_alt_control_command(globals()["acig20"])))
 
 
 app = QApplication(sys.argv)
